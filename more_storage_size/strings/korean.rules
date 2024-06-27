@@ -1,0 +1,28 @@
+Parts
+{
+	Storage1x1 = "저장고"
+	Storage1x1Icon = "저장고 (1x1=1)"
+	Storage1x1Desc = "모든 자원 유형을 1칸 보관 가능합니다."
+
+	Storage2x1 = "저장고"
+	Storage2x1Icon = "저장고 (2x1=2)"
+	Storage2x1Desc = "모든 자원 유형을 2칸 보관 가능합니다."
+
+	Storage3x1 = "저장고"
+	Storage3x1Icon = "저장고 (3x1=3)"
+	Storage3x1Desc = "모든 자원 유형을 3칸 보관 가능합니다."
+
+	Storage4x1 = "저장고"
+	Storage4x1Icon = "저장고 (4x1=4)"
+	Storage4x1Desc = "모든 자원 유형을 4칸 보관 가능합니다."
+
+	Storage4x2 = "저장고"
+	Storage4x2Icon = "저장고 (4x2=8)"
+	Storage4x2Desc = "모든 자원 유형을 8칸 보관 가능합니다."
+
+	Storage2x2Icon = "저장고 (2x2=4)"
+	Storage3x2Icon = "저장고 (3x2=6)"
+	Storage3x3Icon = "저장고 (3x3=9)"
+	Storage4x3Icon = "저장고 (4x3=12)"
+	Storage4x4Icon = "저장고 (4x4=16)"	
+}

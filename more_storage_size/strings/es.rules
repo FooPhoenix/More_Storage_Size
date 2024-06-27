@@ -1,0 +1,28 @@
+Parts
+{
+	Storage1x1 = "Compartimento de almacenamiento"
+	Storage1x1Icon = "Almacenamiento (1x1=1)"
+	Storage1x1Desc = "Almacena 1 pilas de recursos de cualquier tipo."
+
+	Storage2x1 = "Compartimento de almacenamiento"
+	Storage2x1Icon = "Almacenamiento (2x1=2)"
+	Storage2x1Desc = "Almacena 2 pilas de recursos de cualquier tipo."
+
+	Storage3x1 = "Compartimento de almacenamiento"
+	Storage3x1Icon = "Almacenamiento (3x1=3)"
+	Storage3x1Desc = "Almacena 3 pilas de recursos de cualquier tipo."
+
+	Storage4x1 = "Compartimento de almacenamiento"
+	Storage4x1Icon = "Almacenamiento (4x1=4)"
+	Storage4x1Desc = "Almacena 4 pilas de recursos de cualquier tipo."
+
+	Storage4x2 = "Compartimento de almacenamiento"
+	Storage4x2Icon = "Almacenamiento (4x2=8)"
+	Storage4x2Desc = "Almacena 8 pilas de recursos de cualquier tipo."
+
+	Storage2x2Icon = "Almacenamiento (2x2=4)"
+	Storage3x2Icon = "Almacenamiento (3x2=6)"
+	Storage3x3Icon = "Almacenamiento (3x3=9)"
+	Storage4x3Icon = "Almacenamiento (4x3=12)"
+	Storage4x4Icon = "Almacenamiento (4x4=16)"	
+}

@@ -1,0 +1,28 @@
+Parts
+{
+	Storage1x1 = "存储室"
+	Storage1x1Icon = "存储(1x1=1)"
+	Storage1x1Desc = "存储1堆任何类型的资源。"
+
+	Storage2x1 = "存储室"
+	Storage2x1Icon = "存储(2x1=2)"
+	Storage2x1Desc = "存储2堆任何类型的资源。"
+
+	Storage3x1 = "存储室"
+	Storage3x1Icon = "存储(3x1=3)"
+	Storage3x1Desc = "存储3堆任何类型的资源。"
+
+	Storage4x1 = "存储室"
+	Storage4x1Icon = "存储(4x1=4)"
+	Storage4x1Desc = "存储4堆任何类型的资源。"
+
+	Storage4x2 = "存储室"
+	Storage4x2Icon = "存储(4x2=8)"
+	Storage4x2Desc = "存储8堆任何类型的资源。"
+
+	Storage2x2Icon = "存储(2x2=4)"
+	Storage3x2Icon = "存储(3x2=6)"
+	Storage3x3Icon = "存储(3x3=9)"
+	Storage4x3Icon = "存储(4x3=12)"
+	Storage4x4Icon = "存储(4x4=16)"	
+}

@@ -1,0 +1,28 @@
+Parts
+{
+	Storage1x1 = "Lagerhalle"
+	Storage1x1Icon = "Lager (1x1=1)"
+	Storage1x1Desc = "Lagert 1 Stapel von Ressourcen jeder Art."
+
+	Storage2x1 = "Lagerhalle"
+	Storage2x1Icon = "Lager (2x1=2)"
+	Storage2x1Desc = "Lagert 2 Stapel von Ressourcen jeder Art."
+
+	Storage3x1 = "Lagerhalle"
+	Storage3x1Icon = "Lager (3x1=3)"
+	Storage3x1Desc = "Lagert 3 Stapel von Ressourcen jeder Art."
+
+	Storage4x1 = "Lagerhalle"
+	Storage4x1Icon = "Lager (4x1=4)"
+	Storage4x1Desc = "Lagert 4 Stapel von Ressourcen jeder Art."
+
+	Storage4x2 = "Lagerhalle"
+	Storage4x2Icon = "Lager (4x2=8)"
+	Storage4x2Desc = "Lagert 8 Stapel von Ressourcen jeder Art."
+
+	Storage2x2Icon = "Lager (2x2=4)"
+	Storage3x2Icon = "Lager (3x2=6)"
+	Storage3x3Icon = "Lager (3x3=9)"
+	Storage4x3Icon = "Lager (4x3=12)"
+	Storage4x4Icon = "Lager (4x4=16)"	
+}

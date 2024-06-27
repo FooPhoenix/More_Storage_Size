@@ -1,0 +1,28 @@
+Parts
+{
+	Storage1x1 = "Storage Bay"
+	Storage1x1Icon = "Storage (1x1=1)"
+	Storage1x1Desc = "Stores 1 stack of resources of any types."
+
+	Storage2x1 = "Storage Bay"
+	Storage2x1Icon = "Storage (2x1=2)"
+	Storage2x1Desc = "Stores 2 stacks of resources of any types."
+
+	Storage3x1 = "Storage Bay"
+	Storage3x1Icon = "Storage (3x1=3)"
+	Storage3x1Desc = "Stores 3 stacks of resources of any types."
+
+	Storage4x1 = "Storage Bay"
+	Storage4x1Icon = "Storage (4x1=4)"
+	Storage4x1Desc = "Stores 4 stacks of resources of any types."
+
+	Storage4x2 = "Storage Bay"
+	Storage4x2Icon = "Storage (4x2=8)"
+	Storage4x2Desc = "Stores 8 stacks of resources of any types."
+
+	Storage2x2Icon = "Storage (2x2=4)"
+	Storage3x2Icon = "Storage (3x2=6)"
+	Storage3x3Icon = "Storage (3x3=9)"
+	Storage4x3Icon = "Storage (4x3=12)"
+	Storage4x4Icon = "Storage (4x4=16)"	
+}

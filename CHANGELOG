@@ -1,0 +1,53 @@
+╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║ Version         : 2.0.0                                                                                              ║
+║ Committed       : 2024.09.25                                                                                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+Full rework of the original "More Storage Size" mod.
+
+───> Added      <───────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    - New images and icons for all storage parts from the game :
+        - storage_2x2
+        - storage_3x2
+        - storage_3x3
+        - storage_4x3
+        - storage_4x4
+        
+    - A new version without wall of each storage parts is added. 
+
+    - The changelog file.
+    - The license file.
+    - The version file.
+    - The Steam description file.    
+
+───> Changed    <───────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    - Updated the mod.rules file : The file add all storage parts with walls and without wall. Native storage parts
+      from the game are patched to use new images and icons.
+    - Updated the Steam workshop logo. (logo.png)
+    
+    - All these storage parts have new images and icons generated with the new script (see previous commit) :
+        - storage_1x1
+        - storage_2x1
+        - storage_3x1
+        - storage_4x1
+        - storage_4x2
+
+
+    
+╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║ Version         : 2.0.0                                                                                              ║
+║ Committed       : 2024.09.24                                                                                         ║
+╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+New image generator process.
+
+───> Added      <───────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    in the ImageGenerator folder :
+    
+    - The ExecProcess.PspScript file : This is a python script for Paint Shop Pro 8.1, it will pilot PSP to generate
+      all the wanted storage images.
+
+    - 8 images Paint Shop Pro 8.1 used to generate the storage images.

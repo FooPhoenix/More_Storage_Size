@@ -1,0 +1,164 @@
+
+ID = FooPhoenix.MoreStorageSize
+Author = "FooPhoenix"
+Name = "More Storage Size (Standard Edition)"
+Version = 2.0.0
+
+CompatibleGameVersions = ["0.20.0", "0.21.0", "0.22.0", "0.23.0", "0.24.0", "0.25.0", "0.26.0", "0.27.0"]
+
+ModifiesMultiplayer = true
+
+Description = "The \"More Storage Size\" mods familly are mods that adds new storage sizes for your ships.\n  - More Storage Size (Standard Edition) : Complete all game storage size from 1x1 to 4x4.\n  - More Storage Size (Extended Edition) : Adds all storage size from 5x1 to 6x6.\n  - More Storage Size (Extreme Edition) : Adds all storage size from 7x1 to 8x8.\n  - More Storage Size ('You are crazy' Edition) : Adds some very big storage size like 12x12 and 16x16.\n Storage without wall between each other are also added.\n\nUpdated for the game version '0.27.xx'."
+Logo = "logo.png"
+
+StringsFolder = "strings"
+
+Actions
+[
+    // {
+	// 	Action = RemoveMany
+        
+	// 	IgnoreIfNotExisting = true
+        
+    //     RemoveMany
+	// 	[
+    //         "<ships/terran/storage_2x2/storage_2x2.rules>/Part"
+    //         "<ships/terran/storage_3x2/storage_3x2.rules>/Part"
+    //         "<ships/terran/storage_3x3/storage_3x3.rules>/Part"
+    //         "<ships/terran/storage_4x3/storage_4x3.rules>/Part"
+    //         "<ships/terran/storage_4x4/storage_4x4.rules>/Part"
+    //     ]
+    // }
+	
+    {
+        Action = Overrides
+        OverrideIn = "<./Data/gui/game/designer/editor_groups.rules>"
+        
+        Overrides
+        {
+            StorageNW
+            {
+                NameKey = "EditorGroups/StorageNW"
+                Icon
+                {
+                    Texture
+                    {
+                        File = "gui/storage_nw.png"
+                        MipLevels = 2
+                        SampleMode = Linear
+                    }
+                }
+            	SortOrder = 805
+            }
+        }
+    }    
+    
+    
+    {
+		Action = AddMany
+		AddTo = "<ships/terran/terran.rules>/Terran/Parts"
+
+		CreateIfNotExisting = false
+		IgnoreIfNotExisting = false
+
+		ManyToAdd
+		[
+            &<storage_1x1/storage_1x1.rules>/Part
+            &<storage_2x1/storage_2x1.rules>/Part
+            &<storage_3x1/storage_3x1.rules>/Part
+            &<storage_4x1/storage_4x1.rules>/Part
+            // &<storage_2x2/storage_2x2.rules>/Part
+            // &<storage_3x2/storage_3x2.rules>/Part
+            &<storage_4x2/storage_4x2.rules>/Part
+            // &<storage_3x3/storage_3x3.rules>/Part
+            // &<storage_4x3/storage_4x3.rules>/Part
+            // &<storage_4x4/storage_4x4.rules>/Part
+
+            &<storage_1x1/nw_storage_1x1.rules>/Part
+            &<storage_2x1/nw_storage_2x1.rules>/Part
+            &<storage_3x1/nw_storage_3x1.rules>/Part
+            &<storage_4x1/nw_storage_4x1.rules>/Part
+            &<storage_2x2/nw_storage_2x2.rules>/Part
+            &<storage_3x2/nw_storage_3x2.rules>/Part
+            &<storage_4x2/nw_storage_4x2.rules>/Part
+            &<storage_3x3/nw_storage_3x3.rules>/Part
+            &<storage_4x3/nw_storage_4x3.rules>/Part
+            &<storage_4x4/nw_storage_4x4.rules>/Part
+		]
+	}
+    {
+		Action = Overrides
+    
+		OverrideIn = "<ships/terran/storage_2x2/storage_2x2.rules>/Part"
+     
+ 		Overrides
+        {
+            NameKey        = &<storage_2x2/storage_2x2.rules>/Part/NameKey
+            IconNameKey    = &<storage_2x2/storage_2x2.rules>/Part/IconNameKey
+            DescriptionKey = &<storage_2x2/storage_2x2.rules>/Part/DescriptionKey
+            
+            EditorIcon = &<storage_2x2/storage_2x2.rules>/Part/EditorIcon
+            Components = &<storage_2x2/storage_2x2.rules>/Part/Components
+        }
+    }
+    {
+		Action = Overrides
+    
+		OverrideIn = "<ships/terran/storage_3x2/storage_3x2.rules>/Part"
+     
+ 		Overrides
+        {
+            NameKey        = &<storage_3x2/storage_3x2.rules>/Part/NameKey
+            IconNameKey    = &<storage_3x2/storage_3x2.rules>/Part/IconNameKey
+            DescriptionKey = &<storage_3x2/storage_3x2.rules>/Part/DescriptionKey
+            
+            EditorIcon = &<storage_3x2/storage_3x2.rules>/Part/EditorIcon
+            Components = &<storage_3x2/storage_3x2.rules>/Part/Components
+        }
+    }
+    {
+		Action = Overrides
+    
+		OverrideIn = "<ships/terran/storage_3x3/storage_3x3.rules>/Part"
+     
+ 		Overrides
+        {
+            NameKey        = &<storage_3x3/storage_3x3.rules>/Part/NameKey
+            IconNameKey    = &<storage_3x3/storage_3x3.rules>/Part/IconNameKey
+            DescriptionKey = &<storage_3x3/storage_3x3.rules>/Part/DescriptionKey
+            
+            EditorIcon = &<storage_3x3/storage_3x3.rules>/Part/EditorIcon
+            Components = &<storage_3x3/storage_3x3.rules>/Part/Components
+        }
+    }
+    {
+		Action = Overrides
+    
+		OverrideIn = "<ships/terran/storage_4x3/storage_4x3.rules>/Part"
+     
+ 		Overrides
+        {
+            NameKey        = &<storage_4x3/storage_4x3.rules>/Part/NameKey
+            IconNameKey    = &<storage_4x3/storage_4x3.rules>/Part/IconNameKey
+            DescriptionKey = &<storage_4x3/storage_4x3.rules>/Part/DescriptionKey
+            
+            EditorIcon = &<storage_4x3/storage_4x3.rules>/Part/EditorIcon
+            Components = &<storage_4x3/storage_4x3.rules>/Part/Components
+        }
+    }
+    {
+		Action = Overrides
+    
+		OverrideIn = "<ships/terran/storage_4x4/storage_4x4.rules>/Part"
+     
+ 		Overrides
+        {
+            NameKey        = &<storage_4x4/storage_4x4.rules>/Part/NameKey
+            IconNameKey    = &<storage_4x4/storage_4x4.rules>/Part/IconNameKey
+            DescriptionKey = &<storage_4x4/storage_4x4.rules>/Part/DescriptionKey
+            
+            EditorIcon = &<storage_4x4/storage_4x4.rules>/Part/EditorIcon
+            Components = &<storage_4x4/storage_4x4.rules>/Part/Components
+        }
+    }    
+]

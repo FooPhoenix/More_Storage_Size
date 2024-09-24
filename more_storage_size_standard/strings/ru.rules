@@ -1,0 +1,68 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+EditorGroups
+{
+	StorageNW = "Хранение без стены"
+}
+
+Parts
+{
+    FooStorage_1x1       = "Хранилище"
+    FooStorage_1x1Icon   = &FooStorage_1x1
+    FooStorage_1x1Desc   = "Хранит 1 блок ресурсов любого вида."
+    FooStorage_1x1DescNW = "Хранит 1 блок ресурсов любого вида. (Без стены)"
+
+    FooStorage_2x1       = "Хранилище"
+    FooStorage_2x1Icon   = &FooStorage_2x1
+    FooStorage_2x1Desc   = "Хранит 2 блока ресурсов любого вида."
+    FooStorage_2x1DescNW = "Хранит 2 блока ресурсов любого вида. (Без стены)"
+
+    FooStorage_3x1       = "Хранилище"
+    FooStorage_3x1Icon   = &FooStorage_3x1
+    FooStorage_3x1Desc   = "Хранит 3 блока ресурсов любого вида."
+    FooStorage_3x1DescNW = "Хранит 3 блока ресурсов любого вида. (Без стены)"
+
+    FooStorage_4x1       = "Хранилище"
+    FooStorage_4x1Icon   = &FooStorage_4x1
+    FooStorage_4x1Desc   = "Хранит 4 блока ресурсов любого вида."
+    FooStorage_4x1DescNW = "Хранит 4 блока ресурсов любого вида. (Без стены)"
+
+    FooStorage_2x2       = "Хранилище"
+    FooStorage_2x2Icon   = &FooStorage_2x2
+    FooStorage_2x2Desc   = "Хранит 4 блока ресурсов любого вида."
+    FooStorage_2x2DescNW = "Хранит 4 блока ресурсов любого вида. (Без стены)"
+
+    FooStorage_3x2       = "Хранилище"
+    FooStorage_3x2Icon   = &FooStorage_3x2
+    FooStorage_3x2Desc   = "Хранит 6 блоков ресурсов любого вида."
+    FooStorage_3x2DescNW = "Хранит 6 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_4x2       = "Хранилище"
+    FooStorage_4x2Icon   = &FooStorage_4x2
+    FooStorage_4x2Desc   = "Хранит 8 блоков ресурсов любого вида."
+    FooStorage_4x2DescNW = "Хранит 8 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_3x3       = "Хранилище"
+    FooStorage_3x3Icon   = &FooStorage_3x3
+    FooStorage_3x3Desc   = "Хранит 9 блоков ресурсов любого вида."
+    FooStorage_3x3DescNW = "Хранит 9 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_4x3       = "Хранилище"
+    FooStorage_4x3Icon   = &FooStorage_4x3
+    FooStorage_4x3Desc   = "Хранит 12 блоков ресурсов любого вида."
+    FooStorage_4x3DescNW = "Хранит 12 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_4x4       = "Хранилище"
+    FooStorage_4x4Icon   = &FooStorage_4x4
+    FooStorage_4x4Desc   = "Хранит 16 блоков ресурсов любого вида."
+    FooStorage_4x4DescNW = "Хранит 16 блоков ресурсов любого вида. (Без стены)"
+}

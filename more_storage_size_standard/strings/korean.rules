@@ -1,0 +1,68 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+EditorGroups
+{
+	StorageNW = "저장고 (벽 없음)"
+}
+
+Parts
+{
+    FooStorage_1x1       = "저장고"
+    FooStorage_1x1Icon   = &FooStorage_1x1
+    FooStorage_1x1Desc   = "모든 유형의 자원을 보관할 수 있는 1칸의 슬롯을 제공합니다."
+    FooStorage_1x1DescNW = "모든 유형의 자원을 보관할 수 있는 1칸의 슬롯을 제공합니다. (벽 없음)"
+
+    FooStorage_2x1       = "저장고"
+    FooStorage_2x1Icon   = &FooStorage_2x1
+    FooStorage_2x1Desc   = "모든 유형의 자원을 보관할 수 있는 2칸의 슬롯을 제공합니다."
+    FooStorage_2x1DescNW = "모든 유형의 자원을 보관할 수 있는 2칸의 슬롯을 제공합니다. (벽 없음)"
+
+    FooStorage_3x1       = "저장고"
+    FooStorage_3x1Icon   = &FooStorage_3x1
+    FooStorage_3x1Desc   = "모든 유형의 자원을 보관할 수 있는 3칸의 슬롯을 제공합니다."
+    FooStorage_3x1DescNW = "모든 유형의 자원을 보관할 수 있는 3칸의 슬롯을 제공합니다. (벽 없음)"
+
+    FooStorage_4x1       = "저장고"
+    FooStorage_4x1Icon   = &FooStorage_4x1
+    FooStorage_4x1Desc   = "모든 유형의 자원을 보관할 수 있는 4칸의 슬롯을 제공합니다."
+    FooStorage_4x1DescNW = "모든 유형의 자원을 보관할 수 있는 4칸의 슬롯을 제공합니다. (벽 없음)"
+
+    FooStorage_2x2       = "저장고"
+    FooStorage_2x2Icon   = &FooStorage_2x2
+    FooStorage_2x2Desc   = "모든 유형의 자원을 보관할 수 있는 4칸의 슬롯을 제공합니다."
+    FooStorage_2x2DescNW = "모든 유형의 자원을 보관할 수 있는 4칸의 슬롯을 제공합니다. (벽 없음)"
+
+    FooStorage_3x2       = "저장고"
+    FooStorage_3x2Icon   = &FooStorage_3x2
+    FooStorage_3x2Desc   = "모든 유형의 자원을 보관할 수 있는 6칸의 슬롯을 제공합니다."
+    FooStorage_3x2DescNW = "모든 유형의 자원을 보관할 수 있는 6칸의 슬롯을 제공합니다. (벽 없음)"
+
+    FooStorage_4x2       = "저장고"
+    FooStorage_4x2Icon   = &FooStorage_4x2
+    FooStorage_4x2Desc   = "모든 유형의 자원을 보관할 수 있는 8칸의 슬롯을 제공합니다."
+    FooStorage_4x2DescNW = "모든 유형의 자원을 보관할 수 있는 8칸의 슬롯을 제공합니다. (벽 없음)"
+
+    FooStorage_3x3       = "저장고"
+    FooStorage_3x3Icon   = &FooStorage_3x3
+    FooStorage_3x3Desc   = "모든 유형의 자원을 보관할 수 있는 9칸의 슬롯을 제공합니다."
+    FooStorage_3x3DescNW = "모든 유형의 자원을 보관할 수 있는 9칸의 슬롯을 제공합니다. (벽 없음)"
+
+    FooStorage_4x3       = "저장고"
+    FooStorage_4x3Icon   = &FooStorage_4x3
+    FooStorage_4x3Desc   = "모든 유형의 자원을 보관할 수 있는 12칸의 슬롯을 제공합니다."
+    FooStorage_4x3DescNW = "모든 유형의 자원을 보관할 수 있는 12칸의 슬롯을 제공합니다. (벽 없음)"
+
+    FooStorage_4x4       = "저장고"
+    FooStorage_4x4Icon   = &FooStorage_4x4
+    FooStorage_4x4Desc   = "모든 유형의 자원을 보관할 수 있는 16칸의 슬롯을 제공합니다."
+    FooStorage_4x4DescNW = "모든 유형의 자원을 보관할 수 있는 16칸의 슬롯을 제공합니다. (벽 없음)"
+}

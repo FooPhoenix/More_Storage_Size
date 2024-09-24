@@ -1,0 +1,68 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+EditorGroups
+{
+	StorageNW = "Armazenamento sem parede"
+}
+
+Parts
+{
+    FooStorage_1x1       = "Baia de armazenamento"
+    FooStorage_1x1Icon   = "Armazém"
+    FooStorage_1x1Desc   = "Armazena 1 pilha de recursos de qualquer tipo."
+    FooStorage_1x1DescNW = "Armazena 1 pilha de recursos de qualquer tipo. (Sem parede)"
+
+    FooStorage_2x1       = "Baia de armazenamento"
+    FooStorage_2x1Icon   = "Armazém"
+    FooStorage_2x1Desc   = "Armazena 2 pilhas de recursos de qualquer tipo."
+    FooStorage_2x1DescNW = "Armazena 2 pilhas de recursos de qualquer tipo. (Sem parede)"
+
+    FooStorage_3x1       = "Baia de armazenamento"
+    FooStorage_3x1Icon   = "Armazém"
+    FooStorage_3x1Desc   = "Armazena 3 pilhas de recursos de qualquer tipo."
+    FooStorage_3x1DescNW = "Armazena 3 pilhas de recursos de qualquer tipo. (Sem parede)"
+
+    FooStorage_4x1       = "Baia de armazenamento"
+    FooStorage_4x1Icon   = "Armazém"
+    FooStorage_4x1Desc   = "Armazena 4 pilhas de recursos de qualquer tipo."
+    FooStorage_4x1DescNW = "Armazena 4 pilhas de recursos de qualquer tipo. (Sem parede)"
+
+    FooStorage_2x2       = "Baia de armazenamento"
+    FooStorage_2x2Icon   = "Armazém"
+    FooStorage_2x2Desc   = "Armazena 4 pilhas de recursos de qualquer tipo."
+    FooStorage_2x2DescNW = "Armazena 4 pilhas de recursos de qualquer tipo. (Sem parede)"
+
+    FooStorage_3x2       = "Baia de armazenamento"
+    FooStorage_3x2Icon   = "Armazém"
+    FooStorage_3x2Desc   = "Armazena 6 pilhas de recursos de qualquer tipo."
+    FooStorage_3x2DescNW = "Armazena 6 pilhas de recursos de qualquer tipo. (Sem parede)"
+
+    FooStorage_4x2       = "Baia de armazenamento"
+    FooStorage_4x2Icon   = "Armazém"
+    FooStorage_4x2Desc   = "Armazena 8 pilhas de recursos de qualquer tipo."
+    FooStorage_4x2DescNW = "Armazena 8 pilhas de recursos de qualquer tipo. (Sem parede)"
+
+    FooStorage_3x3       = "Baia de armazenamento"
+    FooStorage_3x3Icon   = "Armazém"
+    FooStorage_3x3Desc   = "Armazena 9 pilhas de recursos de qualquer tipo."
+    FooStorage_3x3DescNW = "Armazena 9 pilhas de recursos de qualquer tipo. (Sem parede)"
+
+    FooStorage_4x3       = "Baia de armazenamento"
+    FooStorage_4x3Icon   = "Armazém"
+    FooStorage_4x3Desc   = "Armazena 12 pilhas de recursos de qualquer tipo."
+    FooStorage_4x3DescNW = "Armazena 12 pilhas de recursos de qualquer tipo. (Sem parede)"
+
+    FooStorage_4x4       = "Baia de armazenamento"
+    FooStorage_4x4Icon   = "Armazém"
+    FooStorage_4x4Desc   = "Armazena 16 pilhas de recursos de qualquer tipo."
+    FooStorage_4x4DescNW = "Armazena 16 pilhas de recursos de qualquer tipo. (Sem parede)"
+}

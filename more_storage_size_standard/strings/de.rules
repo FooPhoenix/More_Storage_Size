@@ -1,0 +1,68 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+EditorGroups
+{
+	StorageNW = "Lagerung ohne Wand"
+}
+
+Parts
+{
+    FooStorage_1x1       = "Lagerhalle"
+    FooStorage_1x1Icon   = &FooStorage_1x1
+    FooStorage_1x1Desc   = "Lagert 1 Stapel von Ressourcen jeder Art."
+    FooStorage_1x1DescNW = "Lagert 1 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+
+    FooStorage_2x1       = "Lagerhalle"
+    FooStorage_2x1Icon   = &FooStorage_2x1
+    FooStorage_2x1Desc   = "Lagert 2 Stapel von Ressourcen jeder Art."
+    FooStorage_2x1DescNW = "Lagert 2 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+
+    FooStorage_3x1       = "Lagerhalle"
+    FooStorage_3x1Icon   = &FooStorage_3x1
+    FooStorage_3x1Desc   = "Lagert 3 Stapel von Ressourcen jeder Art."
+    FooStorage_3x1DescNW = "Lagert 3 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+
+    FooStorage_4x1       = "Lagerhalle"
+    FooStorage_4x1Icon   = &FooStorage_4x1
+    FooStorage_4x1Desc   = "Lagert 4 Stapel von Ressourcen jeder Art."
+    FooStorage_4x1DescNW = "Lagert 4 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+
+    FooStorage_2x2       = "Lagerhalle"
+    FooStorage_2x2Icon   = &FooStorage_2x2
+    FooStorage_2x2Desc   = "Lagert 4 Stapel von Ressourcen jeder Art."
+    FooStorage_2x2DescNW = "Lagert 4 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+
+    FooStorage_3x2       = "Lagerhalle"
+    FooStorage_3x2Icon   = &FooStorage_3x2
+    FooStorage_3x2Desc   = "Lagert 6 Stapel von Ressourcen jeder Art."
+    FooStorage_3x2DescNW = "Lagert 6 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+
+    FooStorage_4x2       = "Lagerhalle"
+    FooStorage_4x2Icon   = &FooStorage_4x2
+    FooStorage_4x2Desc   = "Lagert 8 Stapel von Ressourcen jeder Art."
+    FooStorage_4x2DescNW = "Lagert 8 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+
+    FooStorage_3x3       = "Lagerhalle"
+    FooStorage_3x3Icon   = &FooStorage_3x3
+    FooStorage_3x3Desc   = "Lagert 9 Stapel von Ressourcen jeder Art."
+    FooStorage_3x3DescNW = "Lagert 9 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+
+    FooStorage_4x3       = "Lagerhalle"
+    FooStorage_4x3Icon   = &FooStorage_4x3
+    FooStorage_4x3Desc   = "Lagert 12 Stapel von Ressourcen jeder Art."
+    FooStorage_4x3DescNW = "Lagert 12 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+
+    FooStorage_4x4       = "Lagerhalle"
+    FooStorage_4x4Icon   = &FooStorage_4x4
+    FooStorage_4x4Desc   = "Lagert 16 Stapel von Ressourcen jeder Art."
+    FooStorage_4x4DescNW = "Lagert 16 Stapel von Ressourcen jeder Art. (Ohne Wand)"
+}

@@ -1,3 +1,5 @@
 .vscode/*
-more_storage_size/.workshop
+more_storage_size_standard/.workshop
+more_storage_size_extended/.workshop
+more_storage_size_extreme/.workshop
 .timetracker

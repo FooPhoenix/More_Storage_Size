@@ -1,0 +1,4202 @@
+from JascApp import *
+from time import sleep
+from copy import deepcopy
+from math import floor
+from random import shuffle
+from random import randrange
+import random
+import sys
+import os
+
+E = None
+
+ModPath = 'C:\\infrastructure\\projects\\Modding\\Cosmoteer\\More Storage Size\\more_storage_size_extreme'
+
+Images   = { }
+Storages = { }
+
+# CurrentStorage = None
+# StorageName = ''
+
+App = App
+
+# My nose is bleeding when I need to do this xD
+true  = App.Constants.Boolean.true      # type: bool
+false = App.Constants.Boolean.false     # type: bool
+
+types = {   
+    'Group': App.Constants.LayerType.Group,     # type: int
+    'Mask': App.Constants.LayerType.Mask,       # type: int
+    'Raster': App.Constants.LayerType.Raster,   # type: int
+ } # type: dict[str, int]
+
+# none  = App.Constants.SelectionType.None
+
+# The main function called by Paint Shop Pro when the script is launched.
+def Do(Environment):
+    
+    global PSP
+    global ModPath
+    
+    print(u'Python version' + sys.version)    
+    
+    PSP = PSPClass(Environment)
+    
+    impacts = PSP.openImage('Impacts')
+    floor   = PSP.openImage('Floor')
+    walls   = PSP.openImage('Walls')
+    roof    = PSP.openImage('Roof')
+    doors   = PSP.openImage('Doors')
+    icons   = PSP.openImage('Icons')
+    
+    impacts.initGrid(64, 10, 10)
+    floor.initGrid(64, 1, 1)
+    walls.initGrid(32, 26, 1)
+    roof.initGrid(32, 10, 6)
+    doors.initGrid(32, 10, 10)
+    
+    # for a in App.Constants.All():
+    #     print(a.Name() + ' : ', a.Values())
+
+    def generateStorage(width, height):
+        if height > width:
+            return
+        
+        current_storage = Storage(width, height)
+        
+        # current_storage.createLayers()
+        # current_storage.generateFloors()
+        # current_storage.generateWalls()
+        # current_storage.generateRoofs()
+        # current_storage.generateDoors()
+        # current_storage.finalizeRoofs()
+        # current_storage.saveAll()
+        # current_storage.makeIcon('icon.png')
+        # current_storage.makeIcon('nw_icon.png', true)
+        current_storage.writeRules()
+        current_storage.writeRules(true)
+
+        current_storage.close()
+    
+    sw = 1
+    sh = 1 
+    
+    
+    ModPath = 'C:\\infrastructure\\projects\\Modding\\Cosmoteer\\More Storage Size\\more_storage_size_standard'
+    
+    for height in range(1, 5):
+        for width in range(1, 5):
+            if height < sh or (height == sh and width < sw):
+                continue
+            generateStorage(width, height)
+
+    ModPath = 'C:\\infrastructure\\projects\\Modding\\Cosmoteer\\More Storage Size\\more_storage_size_extended'
+
+    for height in range(1, 7):
+        for width in range(5, 7):
+            if height < sh or (height == sh and width < sw):
+                continue
+            generateStorage(width, height)
+
+    ModPath = 'C:\\infrastructure\\projects\\Modding\\Cosmoteer\\More Storage Size\\more_storage_size_extreme'
+
+    for height in range(1, 9):
+        for width in range(7, 9):
+            if height < sh or (height == sh and width < sw):
+                continue
+            generateStorage(width, height)
+
+
+
+    # generateStorage(8, 6)
+    
+
+class PSPImage: 
+    # This class is just a placeholder for the image object returned by the PSP API...
+    pass
+
+class PSPClass:
+    
+    settings = { }  # type: dict[str, dict]
+        
+    def __init__(self, Environment):
+
+        self.env = Environment
+        
+        self.__init_settings__()
+        
+        self.callAPI('EnableOptimizedScriptUndo')
+        self.callAPI('CloseAllFiles')
+        
+        self.image_list = [ ]           # type: list[Image]
+        self.images     = { }           # type: dict[str, Image]
+        
+        self.storages   = { }           # type: dict[str, Storage]
+        
+        self.current_storage = None     # type: Storage
+                
+    def __init_settings__(self):
+        
+        self.settings['GeneralSettings']                = {
+            'ExecutionMode': App.Constants.ExecutionMode.Silent, 
+            'AutoActionMode': App.Constants.AutoActionMode.AllAlways
+        }
+        self.settings['EnableOptimizedScriptUndo']      = { }
+        self.settings['CloseAllFiles']                  = {
+            'SaveAllNoneList': App.Constants.SaveAllNoneList.SaveNone, 
+        }
+        self.settings['FileOpen']                       = {
+            'FileFormat': App.Constants.FileFormat.Unknown, 
+        }
+        self.settings['NewFile']                        = {
+            'ColorDepth': App.Constants.Colordepth.SixteenMillionColor, 
+            'DimensionUnits': App.Constants.DimensionType.Pixels, 
+            'ResolutionUnits': App.Constants.ResolutionUnits.PixelsPerCM, 
+            'Resolution': 100, 
+            'FillMaterial': 
+            {
+                'Color': (255,255,255), 
+                'Pattern': None, 
+                'Gradient': None, 
+                'Texture': None, 
+                'Identity': u'Material'
+            }, 
+            'Transparent': true, 
+            'VectorBackground': false, 
+        }
+        self.settings['SelectDocument']                 = { }
+        self.settings['SelectLayer']                    = { }
+        self.settings['ReturnLayerProperties']          = { }
+        self.settings['SelectNextLayer']                = { }
+        self.settings['ReturnImageInfo']                = { }
+        self.settings['NewRasterLayer']                 = {
+            'General': {
+                'Opacity': 100, 
+                'IsTransparencyLocked': false, 
+                'LinkSet': 0, 
+                'UseHighlight': false, 
+                'PaletteHighlightColor': (255,255,64), 
+                'GroupLink': false, 
+                'BlendMode': App.Constants.BlendMode.Normal
+            }, 
+            'BlendRanges': {
+                'BlendRangeGreen': (0,0,255,255,0,0,255,255), 
+                'BlendRangeRed': (0,0,255,255,0,0,255,255), 
+                'BlendRangeBlue': (0,0,255,255,0,0,255,255), 
+                'BlendRangeGrey': (0,0,255,255,0,0,255,255)
+            }        
+        }
+        self.settings['NewLayerGroup']                  = {
+            'General': {
+                'Opacity': 100, 
+                'IsTransparencyLocked': false, 
+                'LinkSet': 0, 
+                'UseHighlight': false, 
+                'PaletteHighlightColor': (255,255,64), 
+                'GroupLink': false, 
+                'BlendMode': App.Constants.BlendMode.Normal
+            }, 
+            'BlendRanges': {
+                'BlendRangeGreen': (0,0,255,255,0,0,255,255), 
+                'BlendRangeRed': (0,0,255,255,0,0,255,255), 
+                'BlendRangeBlue': (0,0,255,255,0,0,255,255), 
+                'BlendRangeGrey': (0,0,255,255,0,0,255,255)
+            }        
+        }
+        self.settings['LayerProperties']                = { }
+        self.settings['LayerSetVisibility']             = { }
+        self.settings['CopyMerged']                     = { }
+        self.settings['Copy']                           = { }
+        self.settings['SelectNone']                     = { }
+        self.settings['PasteAsNewSelection']            = { }
+        self.settings['Flip']                           = {
+            'Mirror All Layers': false, 
+        }
+        self.settings['Mirror']                         = {
+            'Mirror All Layers': false, 
+        }
+        self.settings['Rotate']                         = {
+            'Direction': false, 
+            'Rotate All Layers': false, 
+            'FillMaterial': {
+                'Color': (0,0,255), 
+                'Pattern': None, 
+                'Gradient': None, 
+                'Texture': None, 
+                'Identity': u'Material'
+            }
+        }
+        self.settings['Selection']                      = {
+            'General':
+            {
+                'Mode': App.Constants.SelectionOperation.Replace, 
+                'Antialias': false, 
+                'Feather': 0
+            }, 
+            'SelectionShape': App.Constants.SelectionShape.Rectangle, 
+        }
+        self.settings['ColorReplacer']                  = {
+            'BrushTip': {
+                'Shape': App.Constants.BrushShape.Rectangular, 
+                'CustomBrush': None, 
+                'Size': 64, 
+                'Hardness': 100, 
+                'Density': 100, 
+                'Rotation': 0, 
+                'Thickness': 100, 
+                'Step': 32
+            }, 
+            'Brush': { }, 
+            # 'PrimaryMaterial': App.Constants.MaterialRef.Foreground, 
+            'PrimaryMaterial': App.Constants.MaterialRef.Background, 
+            'ForegroundMaterial': {
+                'Color': (0,0,255), 
+                'Pattern': None, 
+                'Gradient': None, 
+                'Texture': None, 
+                'Identity': 'Material'
+                }, 
+            'BackgroundMaterial': {
+                'Color': (255,0,0), 
+                'Pattern': None, 
+                'Gradient': None, 
+                'Texture': None, 
+                'Identity': 'Material'
+                }, 
+            'Stroke': [ ], 
+            'Tolerance': 5
+        }
+        self.settings['PaintBrush']                     = {
+            'BrushTip': {
+                'Shape': App.Constants.BrushShape.Round, 
+                'CustomBrush': None, 
+                'Size': 1, 
+                'Hardness': 100, 
+                'Density': 100, 
+                'Rotation': 0, 
+                'Thickness': 100, 
+                'Step': 32
+                }, 
+            'Brush': {
+                'Opacity': 100, 
+                'ContinuousPaint': false, 
+                'WetLookPaint': false, 
+                'BlendMode': App.Constants.BlendMode.Normal
+                }, 
+            'PrimaryMaterial': App.Constants.MaterialRef.Foreground, 
+            'ForegroundMaterial': {
+                'Pattern': None, 
+                'Gradient': None, 
+                'Texture': None, 
+                'Identity': u'Material'
+                }, 
+            'BackgroundMaterial': {
+                'Color': (0,0,0), 
+                'Pattern': None, 
+                'Gradient': None, 
+                'Texture': None, 
+                'Identity': u'Material'
+                }, 
+            'Stroke': [ ]
+        }
+        self.settings['MagicWand']                      = {
+            'General': {
+                'Mode': App.Constants.SelectionOperation.Replace, 
+                'Antialias': false, 
+                'Feather': 0, 
+                'SampleMerged': false
+                }, 
+            'MatchMode': App.Constants.MatchMode.RGBValue, 
+            'Tolerance': 5, 
+        }
+        self.settings['SelectInvert']                   = { }
+        self.settings['ClearSelection']                 = { }
+        self.settings['SelectSaveAlpha']                = {
+            'Overwrite': false, 
+            'UpperLeft': false, 
+            'AlphaIndex': None 
+        }
+        self.settings['SelectLoadAlpha']                = {
+            'SelectionOperation': App.Constants.SelectionOperation.Replace, 
+            'UpperLeft': false, 
+            'ClipToCanvas': false, 
+            'Invert': false, 
+            'AlphaIndex': None
+        }
+        self.settings['SelectExpand']                   = { }
+        self.settings['SelectContract']                 = { }
+        self.settings['GaussianBlur']                   = { }
+        self.settings['NewMaskLayerShow']               = {
+            'General': {
+                'Opacity': 100, 
+                'IsTransparencyLocked': false, 
+                'LinkSet': 0, 
+                'UseHighlight': false, 
+                'PaletteHighlightColor': (255,255,64), 
+                'GroupLink': false, 
+                'BlendMode': App.Constants.BlendMode.Normal
+            }, 
+            'UseSelection': false
+        }
+        self.settings['NewMaskLayerHide']               = {
+            'General': {
+                'Opacity': 100, 
+                'IsTransparencyLocked': false, 
+                'LinkSet': 0, 
+                'UseHighlight': false, 
+                'PaletteHighlightColor': (255,255,64), 
+                'GroupLink': false, 
+                'BlendMode': App.Constants.BlendMode.Normal
+            }, 
+            'UseSelection': false
+        }
+        self.settings['DeleteLayer']                    = {
+            'MergeMask': false, 
+        }
+        self.settings['MsgBox']                         = {
+                
+        }
+        self.settings['Eyedropper']                     = {
+            'SampleSize': 0, 
+            'Material': App.Constants.MaterialRef.Foreground, 
+            'ActiveLayerOnly': false,             
+        }
+        self.settings['Fill']                           = {
+            'BlendMode': App.Constants.BlendMode.Normal, 
+            'MatchMode': App.Constants.MatchMode.RGBValue, 
+            'Material': {
+                'Pattern': None, 
+                'Gradient': None, 
+                'Texture': None, 
+                'Identity': 'Material'
+                }, 
+            'UseForground': true, 
+            'Opacity': 100, 
+            'SampleMerged': false, 
+            'Tolerance': 5, 
+        }
+        self.settings['GetMaterial']                    = {
+            'IsPrimary': true
+        }
+        self.settings['LayerMergeGroup']                = { }
+        self.settings['SelectAll']                      = { }
+        self.settings['Mover']                          = {
+            'Object': App.Constants.LayerOrSelection.Layer, 
+        }
+        self.settings['LayerArrangeMoveIn']             = { }
+        self.settings['Crop']                           = {
+            'Mode': App.Constants.CropMode.Custom, 
+            'SelectedArea': false, 
+            'Units': App.Constants.CropUnits.Pixels, 
+        }
+        self.settings['NewAdjustmentLayerHSL']          = {
+            'General': {
+                'Opacity': 100, 
+                'IsVisible': true, 
+                'IsTransparencyLocked': false, 
+                'LinkSet': 0, 
+                'UseHighlight': false, 
+                'PaletteHighlightColor': (255,255,64), 
+                'GroupLink': true, 
+                'BlendMode': App.Constants.BlendMode.Normal
+                }, 
+            'HSL': {
+                'Colorize': true, 
+                'Master': (0,0,0), 
+                'MasterColorize': (216,100,0), 
+                'Red': (0,0,0,315,345,15,45), 
+                'Green': (0,0,0,75,105,135,165), 
+                'Blue': (0,0,0,195,225,255,285), 
+                'Cyan': (0,0,0,135,165,195,225), 
+                'Magenta': (0,0,0,255,285,315,345), 
+                'Yellow': (0,0,0,15,45,75,105)
+                }, 
+        }
+        self.settings['NewAdjustmentLayerCurves']       = {
+            'General': {
+                'Opacity': 100, 
+                'IsVisible': true, 
+                'IsTransparencyLocked': false, 
+                'LinkSet': 0, 
+                'UseHighlight': false, 
+                'PaletteHighlightColor': (255,255,64), 
+                'GroupLink': true, 
+                'BlendMode': App.Constants.BlendMode.Normal
+                }, 
+            'CurveParams': {
+                'RGB': [(0,0),(255,255)], 
+                'Red': [(0,0),(255,255)], 
+                'Green': [(0,0),(255,255)], 
+                'Blue': [(0,144),(216,255)]
+                }, 
+        }
+        self.settings['NewAdjustmentLayerColorBalance'] = {
+            'General': {
+                'Opacity': 100, 
+                'IsVisible': true, 
+                'IsTransparencyLocked': false, 
+                'LinkSet': 0, 
+                'UseHighlight': false, 
+                'PaletteHighlightColor': (255,255,64), 
+                'GroupLink': true, 
+                'BlendMode': App.Constants.BlendMode.Normal
+                }, 
+            'ColorBalance': {
+                'PreserveLuminance': true, 
+                'Highlight': (-50,0,100), 
+                'Shadow': (0,-100,100), 
+                'Midtone': (-100,-100,100)
+                }, 
+        }
+        self.settings['PNGOptimizer']                   = {
+            'TypeOfTransparency': App.Constants.TransparencyType.AlphaTransparency, 
+            'Tolerance': 1, 
+            'BoostAmount': 1, 
+            'IncludeWindowsColors': false, 
+            'TypeOfImage': App.Constants.ImageType.TrueColor, 
+            'NumberOfColors': 256, 
+            'DitherPercent': 0, 
+            'PaletteType': App.Constants.ColorSelection.OptimizedOctreePalette, 
+            'FileSubFormat': App.Constants.SubFormat.NonInterlaced, 
+            'BoostSelectedColors': false, 
+            # 'TransparentArea': App.Constants.Transparency.None, 
+            # 'TransparentColor': (0, 0, 0), 
+            'Gamma': 45455
+        }
+        self.settings['Resize']                         = {
+            'CurrentDimensionUnits': App.Constants.UnitsOfMeasure.Pixels, 
+            'CurrentResolutionUnits': App.Constants.ResolutionUnits.PixelsPerCM, 
+            'MaintainAspectRatio': false, 
+            'Resample': true, 
+            'ResampleType': App.Constants.ResampleType.WeightedAverage, 
+            'ResizeAllLayers': true, 
+        }
+        self.settings['LayerPromoteBackground']         = { }
+        self.settings['ResizeCanvas']                   = {
+            'MaintainAspect': false, 
+            'HoriPlace': App.Constants.HorizontalType.Center, 
+            'VertPlace': App.Constants.VerticalType.Center,             
+            'FillColor': (255,255,255), 
+            'NewDimUnits': App.Constants.UnitsOfMeasure.Pixels, 
+        }
+        self.settings['Text']                           = {
+            'CreateAs': App.Constants.CreateAs.Vector, 
+            'SavedText': None, 
+            'FinalApply': false, 
+            'Matrix': None            
+        }
+        self.settings['VectorRotate']                   = {
+            'Pivot': (0, 0)            
+        }
+        self.settings['FileClose']                      = {
+            
+        }
+        
+        # self.settings[''] = { }
+                
+    def openImage(self, image_name):
+        # type: (str) -> Image
+        
+        settings = { }
+        
+        if ":" in image_name:
+            settings['FileList'] = [ image_name ]
+        else:
+            settings['FileList'] = [ 'C:\\infrastructure\\projects\\Modding\\Cosmoteer\\More Storage Size\\ImageGenerator\\' + image_name + '.pspimage' ]
+        
+        self.callAPI('FileOpen', settings)
+        
+        image = Image(App.ActiveDocument, image_name)
+        
+        self.image_list.append(image)
+        self.images[image_name] = image
+        
+        return image
+        
+    def createNewImage(self, image_name, width, height):
+        # type: (str, int, int) -> Image
+        
+        settings = {
+            'Width': width, 
+            'Height': height, 
+        }
+        
+        self.callAPI('NewFile', settings)
+
+        image = Image(App.ActiveDocument, image_name)
+        
+        self.image_list.append(image)
+        self.images[image_name] = image
+        
+        return image
+
+    def getCurrentColor(self):
+        
+        color = self.callAPI('GetMaterial', { })
+            
+        return color['Color']
+        
+    def callAPI(self, command, additional_settings = { }, target_image = None):
+        # type: (str, dict[str, any], PSPImage|None) -> any
+        
+        settings = deepcopy(self.settings[command]) # type: dict[str, any]
+        settings['GeneralSettings'] = self.settings['GeneralSettings']
+        
+        for key in additional_settings:
+            if type(additional_settings[key]) == dict:
+                additional_setting = additional_settings[key]   # type: dict[str, any]
+                if key not in settings:
+                    settings[key] = additional_setting
+                else:
+                    for subkey in additional_setting:
+                        settings[key][subkey] = additional_setting[subkey]
+            else:
+                settings[key] = additional_settings[key]
+            
+        if command == '':
+            print(settings)
+            
+        success = false
+        tried = 0
+        while success == false and tried < 30:
+            try:
+                if target_image != None:
+                    result = App.Do(self.env, command, settings, target_image)
+                else:
+                    result = App.Do(self.env, command, settings)
+                success = true
+            except:
+                tried += 1
+                print('FAILED ' + command + ' ' + str(tried) + ' times')
+                sleep(0.03 * tried)                
+            
+        
+        return result
+
+    def debugMessageBox(self, message):
+        
+        self.callAPI('MsgBox', {'Text': message})
+
+class Image:
+    
+    def __init__(self, psp_image, image_name):  
+        # type: (PSPImage, str) -> None
+        
+        self.psp_image = psp_image
+        self.name      = image_name
+        
+        info = self.getInfo()
+        
+        self.width  = info['Width']         # type: int
+        self.height = info['Height']        # type: int
+        
+        self.selection = Selection(self)
+        self.layers    = Layers(self)
+                
+    def getPSPImage(self): 
+        
+        return self.psp_image
+        
+    def initGrid(self, cell_size, cols, rows):  
+        # type: (int, int, int) -> None
+        
+        self.grid = Grid(cell_size, cols, rows)
+    
+    def activate(self):
+                
+        PSP.callAPI('SelectDocument', {}, self.getPSPImage())
+        
+    def copy(self):
+        
+        if len(self.layers.layers) > 1 or self.layers[0].is_group == true:
+            PSP.callAPI('CopyMerged', { }, self.getPSPImage())
+        else:
+            self.selection.unselect()
+            PSP.callAPI('Copy', { }, self.getPSPImage())
+    
+    def mirrorHorizontally(self):
+
+        settings = {
+            'Flip All Layers': true,            
+        }
+        
+        PSP.callAPI('Flip', settings, self.getPSPImage())
+    
+    def mirrorVertically(self):
+
+        settings = {
+            'Mirror All Layers': true,            
+        }
+
+        PSP.callAPI('Mirror', settings, self.getPSPImage())
+            
+    def rotate(self, angle):
+        
+        settings = {
+            'Rotate All Layers': true,            
+            'Direction': false            
+        }
+        
+        if angle < 0:
+            angle = abs(angle)
+            settings['Direction'] = true
+        
+        settings['RotAngleDegrees'] = angle 
+        
+        PSP.callAPI('Rotate', settings, self.getPSPImage())
+    
+    def resize(self, width, height):
+        # type: (int, int) -> None
+        
+        settings = {}
+        settings['Width']  = width
+        settings['Height'] = height
+        
+        PSP.callAPI('Resize', settings, self.getPSPImage())
+        self.width  = width
+        self.height = height
+        
+    def resizeCanvas(self, width, height):
+        # type: (int, int) -> None
+        
+        settings = {}
+        settings['NewWidth']  = width
+        settings['NewHeight'] = height
+        
+        PSP.callAPI('ResizeCanvas', settings, self.getPSPImage())    
+        self.width  = width
+        self.height = height
+            
+    def pipette(self, pos_x, pos_y):
+        # type: (int, int) -> None
+        
+        settings = {
+            'Point': (pos_x, pos_y)
+        }
+        
+        PSP.callAPI('Eyedropper', settings, self.getPSPImage())
+            
+    def deleteOffScreenData(self):
+        
+        settings = {
+            'CropRect': ((0, 0), self.width, self.height), 
+        }
+        
+        PSP.callAPI('Crop', settings, self.getPSPImage())
+                
+    def getInfo(self):
+        # type: () -> dict[str, str|int]
+        
+        props = PSP.callAPI('ReturnImageInfo', {}, self.getPSPImage())
+        
+        return props
+    
+    def hasSelection(self):
+        # type: () -> bool
+        
+        return self.selection.exists()
+
+    def save(self, name):
+        # type: (str) -> None
+
+        settings = {
+            'FileName': name
+        }
+
+        PSP.callAPI('PNGOptimizer', settings, self.getPSPImage())
+
+    def close(self):
+        
+        name = self.name
+        
+        PSP.images[name] = None
+        PSP.image_list.remove(self)
+        
+        self.selection.owner_image = None
+        self.selection = None
+        
+        self.grid = None
+        
+        def removeAllLayers(layers):
+            # type: (list[Layer]) -> None
+            
+            for layer in layers:
+                if type(layer) == str:
+                    continue
+                
+                if layer.is_group == true:
+                    removeAllLayers(layer.layers)
+                    
+                    layer.layers = None
+                    layer.is_group = false
+                
+                layer.owner_image = None
+                layer.selection   = None
+                            
+        removeAllLayers(self.layers.layers)
+        
+        self.layers.layers      = None
+        self.layers.owner_image = None
+        self.layers             = None
+        
+        PSP.callAPI('FileClose', { }, self.getPSPImage())
+
+class Selection:
+    
+    def __init__(self, owner_image):
+        # type: (Image) -> None
+        
+        self.owner_image = owner_image
+
+        self.has_selection = false
+        self.is_float      = false
+        
+    def exists(self, float = false):
+        # type: (bool) -> bool
+        
+        # selection = App.Do( E,
+        #     'GetRasterSelectionRect',
+        #     {
+        #         'GeneralSettings': PSP_GeneralSettings
+        #     },
+        #     Images[image_name])
+            
+        # if selection["Type"] != none:
+        #     return true
+        
+        if float == true:
+            return self.is_float
+        
+        return self.has_selection
+        
+    def save(self, name):
+    
+        if self.exists() == true:
+            
+            settings = {
+                'AlphaName': name, 
+            }
+            
+            PSP.callAPI('SelectSaveAlpha', settings, self.owner_image.getPSPImage())
+    
+    def load(self, name):
+
+        if self.exists(true):
+            self.unselect()
+
+        settings = {
+            'AlphaName': name, 
+        }
+        
+        PSP.callAPI('SelectLoadAlpha', settings, self.owner_image.getPSPImage())
+        
+        self.has_selection = true
+        
+    def unselect(self):
+        
+        if self.exists() == true:
+            PSP.callAPI('SelectNone', { }, self.owner_image.getPSPImage())
+            
+            self.has_selection = false
+            self.is_float      = false
+
+    def invert(self):
+        
+        if self.exists(true) == true:
+            return 
+        
+        if self.exists() == true:
+            PSP.callAPI('SelectInvert', { }, self.owner_image.getPSPImage())
+    
+    def expand(self, size):
+
+        if self.exists(true) == true:
+            return 
+    
+        if self.exists() == true:
+            settings = {
+                'ExpandAmount': size, 
+            }
+            
+            PSP.callAPI('SelectExpand', settings, self.owner_image.getPSPImage())
+    
+    def contract(self, size):
+    
+        if self.exists(true) == true:
+            return 
+    
+        if self.exists() == true:
+            settings = {
+                'ContractAmount': size, 
+            }
+            
+            PSP.callAPI('SelectContract', settings, self.owner_image.getPSPImage())
+    
+    def selectAll(self):
+        
+        PSP.callAPI('SelectAll', { }, self.owner_image.getPSPImage())
+    
+    def selectArea(self, x1, y1, x2, y2, add = false):
+        # type: (int, int, int, int, bool) -> None
+        
+        # if self.has_selection == true:
+        #     self.unselect()
+            
+        settings = {
+            'Start': (x1, y1), 
+            'End':   (x2, y2), 
+        }
+        
+        if add == true:
+            settings['General'] = {
+                'Mode': App.Constants.SelectionOperation.Add
+            }
+        
+        PSP.callAPI('Selection', settings, self.owner_image.getPSPImage())
+        self.has_selection = true
+        self.is_float      = false
+        
+    def SelectAreaW(self, pos_x, pos_y, add = false, tol = -1):
+        # type: (int, int, bool, int) -> None
+        
+        # if self.has_selection == true and add == false:
+        #     self.unselect()
+
+        settings = {
+            'Point': (pos_x, pos_y)
+        }
+        
+        if add == true:
+            settings['General'] = {
+                'Mode': App.Constants.SelectionOperation.Add
+            }
+        
+        if tol > -1:
+            settings['Tolerance'] = tol 
+        
+        PSP.callAPI('MagicWand', settings, self.owner_image.getPSPImage())
+        self.has_selection = true
+        self.is_float      = false
+        
+    def copy(self):
+        
+        # if self.exists() == true:
+            PSP.callAPI('Copy', { }, self.owner_image.getPSPImage())
+
+    def delete(self):
+        
+        if self.exists() == true:
+            # Do not confuse with unselect !
+            PSP.callAPI('ClearSelection', { }, self.owner_image.getPSPImage())
+        
+class Grid:
+
+    def __init__(self, cell_size, cols, rows):
+        # type: (int, int, int) -> None
+
+        if type(cell_size) == int:
+            self.cell_size_w = cell_size      # in pixels
+            self.cell_size_h = cell_size      # in pixels
+        else:
+            self.cell_size_w = cell_size['width']      # in pixels
+            self.cell_size_h = cell_size['height']     # in pixels
+            
+        self.cols = cols 
+        self.rows = rows
+
+        self.width  = self.cols * self.cell_size_w
+        self.height = self.rows * self.cell_size_h
+
+        # The center of the grid in pixels coordinate is the
+        # default paste position for PSP.
+        self.default_pos_x = floor(self.width  / 2)
+        self.default_pos_y = floor(self.height / 2)
+        
+    def getPos(self, cell_x, cell_y):
+        
+        pos_x = cell_x * self.cell_size_w
+        pos_y = cell_y * self.cell_size_h
+        
+        # Return the top-left corner of the cell.
+        return (pos_x, pos_y)
+
+    def getPosFromIndex(self, index):
+
+        cell_y = floor(index / self.cols)
+        cell_x = index % self.cols
+        
+        return (cell_x, cell_y)
+
+    def getCellArea(self, cell_x, cell_y):
+        # type: (int, int) -> tuple[int, int, int, int]
+        
+        pos_x1, pos_y1 = self.getPos(cell_x, cell_y)
+        
+        pos_x2 = pos_x1 + self.cell_size_w
+        pos_y2 = pos_y1 + self.cell_size_h
+        
+        # Return the top-left and bottom-right corners of the cell.
+        return (pos_x1, pos_y1, pos_x2, pos_y2)
+            
+    def getPosOffset(self, cell_x, cell_y):
+        
+        # Get the cell position
+        pos_x, pos_y = self.getPos(cell_x, cell_y)
+        
+        # Adjust to the center of the cell.
+        pos_x += self.cell_size_w / 2
+        pos_y += self.cell_size_h / 2
+        
+        # Get the relative position to the grid center.
+        pos_x -= self.default_pos_x
+        pos_y -= self.default_pos_y
+        
+        # Return the cell's center offset.
+        return (pos_x, pos_y)
+
+    def mirrorRelativeCoord(self, side, x, y, offset = -1):
+        # type: (int, int, int, int) -> tuple
+
+        # Side is : 0 Top-Left
+        #           1 Top-Right
+        #           2 Bottom-Left
+        #           3 Bottom-Right
+        #
+        # Received coord are assumed to be bottom-right oriented.
+        #
+
+        if side in (0, 2): # Left
+            x = offset - x
+        if side in (0, 1): # Top 
+            y = offset - y
+
+        return (x, y)
+
+class Storage:
+    
+    def __init__(self, cols, rows):
+        # type: (int, int) -> None
+        
+        self.cols = cols
+        self.rows = rows
+        
+        self.name   = 'storage_' + str(self.cols) + 'x' + str(self.rows)
+        self.folder = ModPath + '\\' + self.name
+
+        self.cell_size  = 64     # type: int
+        self.wall_width = 7      # type: int
+        
+        self.width  = self.cols * self.cell_size
+        self.height = self.rows * self.cell_size
+        
+        self.tile_width   = (self.width  - (self.wall_width * 2)) / self.cols
+        self.tile_height  = (self.height - (self.wall_width * 2)) / self.rows
+        self.tile_width  -= self.tile_width  % 2  # Ensure we are even 
+        self.tile_height -= self.tile_height % 2  # Ensure we are even 
+        
+        self.wall_offset_x = (self.width  - (self.tile_width  * self.cols)) / 2
+        self.wall_offset_y = (self.height - (self.tile_height * self.rows)) / 2
+        
+        self.maxDoorStep = 6    # type: int
+        
+        image = PSP.createNewImage(self.name, self.width, self.height)
+        
+        image.initGrid(self.cell_size, self.cols, self.rows)
+
+        self.image     = image
+        self.icon_size = 72
+        
+        self.grid64 = image.grid
+        self.grid32 = Grid(self.grid64.cell_size_w / 2, self.grid64.cols * 2, self.grid64.rows * 2)
+
+        PSP.storages[self.name] = self
+        PSP.current_storage     = self
+
+    def createLayers(self):
+        
+        layers = [
+            {
+                'Name': "Floors",
+                'IsVisible': true,
+                'Children': [
+                    "Fs - 66%", 
+                    {
+                        'Name': "Floor",
+                        'Children': [
+                            "F - 0%",
+                            "F - No Wall",
+                            ":F - 33%",
+                            ":F - 66%"
+                        ]
+                    },
+                    "Fi - 33%",
+                    "Fi - 66%"
+                ]
+            },
+            {
+                'Name': "Walls",
+                'IsVisible': true,
+                'Children': [
+                    "W - 0%",
+                    "W - 33%",
+                    "W - 66%"
+                ]
+            },
+            {
+                'Name': "Doors",
+                'IsVisible': true,
+                'Children': [ "temp" ]     # Is populated later...
+            },            
+            {
+                'Name': "Roofs",
+                'IsVisible': true,
+                'Children': [
+                    {
+                        'Name': "Roof",
+                        'Children': [
+                            {
+                                'Name': "R - 0%",
+                                'Children': [
+                                    "Rl - 0%",
+                                    "Rs"
+                                ]
+                            },
+                            "Rn - 0%",
+                            ":R - 33%",
+                            ":R - 66%"
+                        ]
+                    },
+                    "Ri - 33%",
+                    "Ri - 66%"
+                ]
+            }            
+        ]
+        
+        # for group in layers:
+        #     if group['Name'] == 'Doors':
+        #         for type_id in ['i', 'n']:
+        #             type = {
+        #                 'Name': 'D' + type_id,
+        #                 'Children': [ ]
+        #             }
+        #             group['Children'].append(type)
+                    
+        #             for damage_id in ['0%', '33%', '66%']:
+        #                 damage = {
+        #                     'Name': type['Name'] + ' ' + damage_id,
+        #                     'Children': [ "" ]
+        #                 }
+        #                 type['Children'].append(damage)
+                                                
+        #                 for step_id in range(1, self.maxDoorStep + 1):
+        #                     step = {
+        #                         'Name': damage['Name'] + ' - S:' + str(step_id),
+        #                         'Children': [ ]
+        #                     }
+        #                     damage['Children'].append(step)
+                            
+        #                     for lamina_id in range(1, max(self.cols, self.rows)):
+        #                         door_lamina = {
+        #                             'Name': step['Name'] + ' - L:' + str(lamina_id),
+        #                             'Children': [ ]
+        #                         }
+        #                         step['Children'].append(door_lamina)
+                                
+        #                         for side_id in ['TL', 'TR', 'BL', 'BR']:
+        #                             side = {
+        #                                 'Name': door_lamina['Name'] + ' - ' + side_id
+        #                             }
+        #                             door_lamina['Children'].append(side)
+                        
+
+        self.image.layers.goToOrigin()
+        self.image.layers[0].addLayers(layers)
+        
+        r1 = self.image.layers.getByName('Raster 1')
+        r1.delete()
+            
+    def generateFloors(self):
+        
+        #region Initialization 
+        
+        floors  = PSP.images['Floor']
+        storage = self.image
+        
+        storage_layers = storage.layers
+        floors_layers  = floors.layers
+        
+        fi33 = storage_layers.getByName("Fi - 33%")     # type: Layer
+        fi66 = storage_layers.getByName("Fi - 66%")     # type: Layer
+        fs33 = storage_layers.getByName("Fs - 66%")     # type: Layer
+        
+        fl00 = storage_layers.getByName("F - 0%")       # type: Layer
+        fl33 = storage_layers.getByName("F - 33%")      # type: Layer
+        fl66 = storage_layers.getByName("F - 66%")      # type: Layer
+        
+        flnw = storage_layers.getByName("F - No Wall")  # type: Layer
+        
+        fbcg = floors_layers.getByName("Background")    # type: Layer
+        fln  = floors_layers.getByName("Lines")         # type: Layer
+        frv  = floors_layers.getByName("Rivets")        # type: Layer
+        fti  = floors_layers.getByName("Tile")          # type: Layer
+        # fnw  = floors_layers.getByName("Nowall")        # type: Layer
+        fstr = floors_layers.getByName("Structure 66%") # type: Layer
+        
+        tile_width  = self.tile_width 
+        tile_height = self.tile_height
+        tiles_grid   = Grid({'width': tile_width, 'height': tile_height}, self.cols, self.rows)
+        
+        wall_offset_x = self.wall_offset_x
+        wall_offset_y = self.wall_offset_y
+        
+        margin_x = (floors.width  - tile_width)  / 2
+        margin_y = (floors.height - tile_height) / 2
+        
+        grid = storage.grid
+        
+        #endregion
+        
+        #region Generate standard floors
+        
+        floors_layers.hideAll()
+
+        # Draw the background
+        fbcg.activate(true)
+        floors.selection.selectArea(0, 0, floors.width, floors.height)
+        floors.selection.copy()
+                    
+        for y in range(grid.rows):
+            for x in range(grid.cols):
+                offset_x, offset_y = grid.getPosOffset(x, y)
+                fl00.pasteClipboard(offset_x, offset_y)
+    
+        fbcg.hide()
+    
+        # Draw lines
+        fln.activate(true)
+        floors.selection.selectArea(margin_x, margin_y, margin_x + tile_width, margin_y + tile_height)
+        floors.selection.copy()
+                    
+        for y in range(grid.rows):
+            for x in range(grid.cols):
+                offset_x, offset_y = tiles_grid.getPosOffset(x, y)
+                fl00.pasteClipboard(offset_x, offset_y)
+
+        floors.selection.selectArea(margin_x, 0, margin_x + tile_width, 0 + (wall_offset_y + (wall_offset_y % 2)))
+        floors.selection.copy()
+        
+        for x in range(grid.cols):
+            offset_x, offset_y = tiles_grid.getPosOffset(x, 0)
+            fl00.pasteClipboard(offset_x, offset_y - ((tile_height / 2) + ((wall_offset_y + (wall_offset_y % 2)) / 2)))
+        
+            offset_x, offset_y = tiles_grid.getPosOffset(x, self.rows - 1)
+            fl00.pasteClipboard(offset_x, offset_y + ((tile_height / 2) + ((wall_offset_y + (wall_offset_y % 2)) / 2)))
+
+        floors.selection.selectArea(0, margin_y, 0 + (wall_offset_x + (wall_offset_x % 2)), margin_y + tile_height)
+        floors.selection.copy()
+        
+        for y in range(grid.rows):
+            offset_x, offset_y = tiles_grid.getPosOffset(0, y)
+            fl00.pasteClipboard(offset_x - ((tile_width / 2) + ((wall_offset_x + (wall_offset_x % 2)) / 2)), offset_y)
+        
+            offset_x, offset_y = tiles_grid.getPosOffset(self.cols - 1, y)
+            fl00.pasteClipboard(offset_x + ((tile_width / 2) + ((wall_offset_x + (wall_offset_x % 2)) / 2)), offset_y)
+            
+        fln.hide()
+    
+        # Draw rivets
+        frv.activate(true)
+        floors.selection.selectArea(margin_x, 0, margin_x + tile_width, 2)
+        floors.selection.copy()
+
+        if self.rows > 1:
+            for y in range(grid.rows + 1):
+                for x in range(grid.cols):
+                    offset_x, offset_y = tiles_grid.getPosOffset(x, y)
+                    fl00.pasteClipboard(offset_x, offset_y - (tile_height / 2))
+        
+        floors.selection.selectArea(0, margin_y, 2, margin_y + tile_height)
+        floors.selection.copy()
+        
+        if self.cols > 1:
+            for x in range(grid.cols + 1):
+                for y in range(grid.rows):
+                    offset_x, offset_y = tiles_grid.getPosOffset(x, y)
+                    fl00.pasteClipboard(offset_x - (tile_width / 2), offset_y)
+            
+        frv.hide()
+
+        # Draw tiles
+        fti.activate(true)
+        floors.selection.selectArea(0, 0, floors.width, floors.height)
+        floors.selection.copy()
+                    
+        for y in range(grid.rows):
+            for x in range(grid.cols):
+                offset_x, offset_y = tiles_grid.getPosOffset(x, y)
+                fl00.pasteClipboard(offset_x, offset_y)
+    
+        fti.hide()
+
+        fl00.hide()
+        
+        #endregion
+        
+        #region Generate the no wall border
+        
+        # fnw.activate(true)
+        # floors.selection.selectArea(margin_x, 0, margin_x + tile_width, 4)
+        # floors.selection.copy()
+        
+        # for x in range(grid.cols):
+        #     offset_x, offset_y = tiles_grid.getPosOffset(x, 0)
+        #     flnw.pasteClipboard(offset_x, offset_y - ((tile_height / 2) + ((wall_offset_y + (wall_offset_y % 2)) / 2)))
+        
+        #     offset_x, offset_y = tiles_grid.getPosOffset(x, self.rows - 1)
+        #     flnw.pasteClipboard(offset_x, offset_y + ((tile_height / 2) + ((wall_offset_y + (wall_offset_y % 2)) / 2)))
+
+        # floors.selection.selectArea(0, margin_y, 4, margin_y + tile_height)
+        # floors.selection.copy()
+        
+        # for y in range(grid.rows):
+        #     offset_x, offset_y = tiles_grid.getPosOffset(0, y)
+        #     flnw.pasteClipboard(offset_x - ((tile_width / 2) + ((wall_offset_x + (wall_offset_x % 2)) / 2)), offset_y)
+        
+        #     offset_x, offset_y = tiles_grid.getPosOffset(self.cols - 1, y)
+        #     flnw.pasteClipboard(offset_x + ((tile_width / 2) + ((wall_offset_x + (wall_offset_x % 2)) / 2)), offset_y)
+            
+        # fnw.hide()
+        # flnw.hide()
+        
+        #endregion
+        
+        #region Generate standard structure
+        
+        fstr.activate(true)
+        floors.selection.selectArea(0, 0, floors.width, floors.height)
+        floors.selection.copy()
+
+        fs33.activate()
+        
+        for y in range(grid.rows):
+            for x in range(grid.cols):
+                offset_x, offset_y = grid.getPosOffset(x, y)
+                fs33.pasteClipboard(offset_x, offset_y)
+    
+        fstr.hide()
+        fs33.hide()
+        
+        #endregion
+        
+        #region Generate damaged parts
+        
+        impacts = Impacts(self)
+    
+        impacts.generateImpacts()
+        impacts.renderImpacts((fi33, fl33, fi66, fl66))
+                
+        #endregion            
+
+    def generateWalls(self):
+        
+        #region Initialization 
+        
+        walls   = PSP.images['Walls']    # type: Image
+        storage = self.image
+        
+        storage_layers = storage.layers
+        walls_layers   = walls.layers
+        
+        wld00  = storage_layers.getByName("W - 0%")      # type: Layer
+        wld33  = storage_layers.getByName("W - 33%")     # type: Layer
+        wld66  = storage_layers.getByName("W - 66%")     # type: Layer
+
+        flnw = storage_layers.getByName("F - No Wall")   # type: Layer
+
+        wlsnw  = walls_layers.getByName("No Wall") # type: Layer
+        wls00  = walls_layers.getByName("0%")      # type: Layer
+        wls33  = walls_layers.getByName("33%")     # type: Layer
+        wls66  = walls_layers.getByName("66%")     # type: Layer
+        
+        storage_grid = Grid(storage.grid.cell_size_w / 2, storage.grid.cols * 2, storage.grid.rows * 2)
+        walls_grid   = Grid(walls.grid.cell_size_w, walls.grid.cols, walls.grid.cols) # Make a grid of cols*cols
+        
+        #endregion
+
+        def getWallIndex(count):
+            if count == 0:
+                return 0
+            
+            if count % 2 == 0:
+                return random.randrange(2, walls_grid.cols, 2)
+            else:
+                return random.randrange(1, walls_grid.cols - 1, 2)
+        
+        walls_position = [ ]
+
+        count = 0
+        for dst_cell_x in range(storage_grid.cols - 1):
+            walls_position.append([ 
+                count,                                          # Index on the current side.
+                dst_cell_x,                                     # Cell_x on the storage grid.
+                0,                                              # Cell_y on the storage grid.
+                getWallIndex(count),                            # Cell_x on the walls grid.
+                0,                                              # Cell_y on the walls grid.
+                0                                               # Walls orientation.
+            ])
+            count += 1
+
+        count = 0
+        for dst_cell_y in range(storage_grid.rows - 1):
+            walls_position.append([
+                count,                                          # Index on the current side.
+                storage_grid.cols - 1,                          # Cell_x on the storage grid.
+                dst_cell_y,                                     # Cell_y on the storage grid.
+                0,                                              # Cell_x on the walls grid.
+                getWallIndex(count),                            # Cell_y on the walls grid.
+                90                                              # Walls orientation.
+            ])
+            count += 1
+        
+        count = 0
+        for dst_cell_x in range(storage_grid.cols - 1, 0, -1):
+            walls_position.append([
+                count,                                          # Index on the current side.
+                dst_cell_x,                                     # Cell_x on the storage grid.
+                storage_grid.rows - 1,                          # Cell_y on the storage grid.
+                (walls_grid.cols - 1) - getWallIndex(count),    # Cell_x on the walls grid.
+                0,                                              # Cell_y on the walls grid.
+                180                                             # Walls orientation.
+            ])
+            count += 1
+
+        count = 0
+        for dst_cell_y in range(storage_grid.rows - 1, 0, -1):
+            walls_position.append([
+                count,                                          # Index on the current side.
+                0,                                              # Cell_x on the storage grid.
+                dst_cell_y,                                     # Cell_y on the storage grid.
+                0,                                              # Cell_x on the walls grid.
+                (walls_grid.cols - 1) - getWallIndex(count),    # Cell_y on the walls grid.
+                270                                             # Walls orientation.
+            ])
+            count += 1
+    
+        walls_layers.hideAll()
+        
+        for layers in [(wld00, wls00), (wld33, wls33), (wld66, wls66), (flnw, wlsnw)]:
+            layer_storage = layers[0]
+            layer_walls   = layers[1]
+            
+            layer_walls.activate(true)
+            
+            current_orientation = 0
+            for index in range(len(walls_position)):
+                dst_cell_x  = walls_position[index][1]
+                dst_cell_y  = walls_position[index][2]
+                
+                src_cell_x  = walls_position[index][3]
+                src_cell_y  = walls_position[index][4]
+
+                orientation = walls_position[index][5]
+
+                if orientation != current_orientation:
+                    walls.rotate(orientation - current_orientation)
+                    current_orientation = orientation
+
+                walls.selection.selectArea(*walls_grid.getCellArea(src_cell_x, src_cell_y))
+                walls.selection.copy()
+                
+                layer_storage.pasteClipboard(*storage_grid.getPosOffset(dst_cell_x, dst_cell_y))
+            
+            walls.rotate(90)
+            
+            storage.selection.unselect()
+            layer_storage.hide()
+            layer_walls.hide()
+
+    def generateRoofs(self):
+        
+        #region Initialization 
+        
+        roof    = PSP.images['Roof']    # type: Image
+        storage = self.image
+        
+        storage_layers = storage.layers
+        roof_layers    = roof.layers
+        
+        rnd00  = storage_layers.getByName("Rn - 0%")    # type: Layer
+        
+        rd00  = storage_layers.getByName("Rl - 0%")     # type: Layer
+        rd33  = storage_layers.getByName("R - 33%")     # type: Layer
+        rd66  = storage_layers.getByName("R - 66%")     # type: Layer
+
+        ri33  = storage_layers.getByName("Ri - 33%")    # type: Layer
+        ri66  = storage_layers.getByName("Ri - 66%")    # type: Layer
+
+        rsN   = roof_layers.getByName("Normals")        # type: Layer
+        rsR   = roof_layers.getByName("Roof")           # type: Layer
+        
+        storage_grid = storage.grid
+        roof_grid    = roof.grid
+        
+        small_mode = (storage_grid.cols == 1 or storage_grid.rows == 1)
+        
+        if small_mode == true:
+            storage_grid = Grid(storage_grid.cell_size_w / 2, storage_grid.cols * 2, storage_grid.rows * 2)
+        else:
+            roof_grid = Grid(roof_grid.cell_size_w * 2, roof_grid.cols / 2, roof_grid.rows / 2)
+            
+        #endregion
+
+        roof_position = [ ]
+        
+        W = storage_grid.cols - 1
+        H = storage_grid.rows - 1
+        O = iif(small_mode, 6, 0)
+        
+        roof_position.append([O + 0, 0, 0, 0])
+        roof_position.append([O + 2, 0, W, 0])
+        roof_position.append([O + 0, 2, 0, H])
+        roof_position.append([O + 2, 2, W, H])
+        
+        if small_mode == true:
+            if W == 3:
+                roof_position.append([O + 1, 4, 1, 0])
+                roof_position.append([O + 2, 4, 2, 0])
+                roof_position.append([O + 1, 5, 1, H])
+                roof_position.append([O + 2, 5, 2, H])
+                
+            elif W > 3:
+                roof_position.append([O + 1, 0, 1    , 0])
+                roof_position.append([O + 1, 0, W - 1, 0])
+                roof_position.append([O + 1, 2, 1    , H])
+                roof_position.append([O + 1, 2, W - 1, H])
+            
+                for pos_x in range(2, W - 1, 2):
+                    roof_position.append([O + 1, 4, pos_x    , 0])
+                    roof_position.append([O + 2, 4, pos_x + 1, 0])
+                    roof_position.append([O + 1, 5, pos_x    , H])
+                    roof_position.append([O + 2, 5, pos_x + 1, H])
+
+            if H == 3:
+                roof_position.append([O + 0, 4, 0, 1])
+                roof_position.append([O + 0, 5, 0, 2])
+                roof_position.append([O + 3, 4, W, 1])
+                roof_position.append([O + 3, 5, W, 2])
+                
+            elif H > 3:
+                roof_position.append([O + 0, 1, 0, 1])
+                roof_position.append([O + 0, 1, 0, H - 1])
+                roof_position.append([O + 2, 1, W, 1])
+                roof_position.append([O + 2, 1, W, H - 1])
+            
+                for pos_y in range(2, H - 1, 2):
+                    roof_position.append([O + 0, 4, 0, pos_y    ])
+                    roof_position.append([O + 0, 5, 0, pos_y + 1])
+                    roof_position.append([O + 3, 4, W, pos_y    ])
+                    roof_position.append([O + 3, 5, W, pos_y + 1])
+        else:
+            for pos_x in range(1, W):
+                roof_position.append([1, 0, pos_x, 0])
+                roof_position.append([1, 2, pos_x, H])
+
+            for pos_y in range(1, H):
+                roof_position.append([0, 1, 0, pos_y])
+                roof_position.append([2, 1, W, pos_y])
+
+        roof_layers.hideAll()
+
+        for layers in [(rsR, rd00), (rsN, rnd00)]:
+            layer_roof    = layers[0]
+            layer_storage = layers[1]
+
+            # layer_storage.activate()
+            layer_roof.activate(true)
+            
+            for index in range(len(roof_position)):
+                src_cell_x  = roof_position[index][0]
+                src_cell_y  = roof_position[index][1]
+                
+                dst_cell_x  = roof_position[index][2]
+                dst_cell_y  = roof_position[index][3]
+                
+                roof.selection.selectArea(*roof_grid.getCellArea(src_cell_x, src_cell_y))
+                roof.selection.copy()
+                
+                layer_storage.pasteClipboard(*storage_grid.getPosOffset(dst_cell_x, dst_cell_y))
+
+            layer_storage.hide()
+            layer_roof.hide()
+            
+        storage.selection.unselect()
+
+        rd00.activate()
+        if small_mode == true:
+            storage.selection.SelectAreaW(20, 20)
+        else:
+            storage.selection.SelectAreaW(48, 48)
+        storage.selection.invert()
+        storage.selection.save('Roof Border Area')
+
+        # Impacts generation
+
+        impacts = Impacts(self)
+    
+        impacts.generateImpacts()
+        impacts.renderImpacts((ri33, rd33, ri66, rd66))
+
+        self.roof_sel_33 = impacts.selection_name_33
+        self.roof_sel_66 = impacts.selection_name_66
+
+    def finalizeRoofs(self):
+        
+        storage = self.image
+        
+        storage_layers = storage.layers
+        
+        rd0   = storage_layers.getByName("R - 0%")      # type: Layer
+        rd00  = storage_layers.getByName("Rl - 0%")     # type: Layer
+        rds00 = storage_layers.getByName("Rs")          # type: Layer
+
+        ri33  = storage_layers.getByName("Ri - 33%")    # type: Layer
+        ri66  = storage_layers.getByName("Ri - 66%")    # type: Layer
+
+        rd00.activate(true)
+        storage.selection.SelectAreaW(5, 5, false, 80)
+        storage.selection.invert()
+        
+        ri33.activate(true)
+        storage.selection.delete()
+        ri33.hide()
+        
+        ri66.activate(true)
+        storage.selection.delete()
+        storage.selection.unselect()
+        ri66.hide()
+        
+        rd00.activate()
+        storage.selection.SelectAreaW(storage.width / 2, storage.height / 2)
+        storage.selection.invert()
+        rds00.activate()
+        rds00.paintAll((0, 0, 0))
+        storage.selection.invert()
+        storage.selection.expand(1)
+        rds00.blurGaussian(1.5)
+        storage.selection.contract(1)
+        storage.selection.invert()
+        storage.selection.delete()
+                
+        storage.selection.unselect()
+        
+        rd0.mergeGroup()
+        rd0.hide()
+
+    def generateDoors(self):
+    
+        #region Initialization 
+    
+        doors   = PSP.images['Doors']   # type: Image
+        storage = self.image            # type: Image
+        
+        doors_layers   = doors.layers
+        storage_layers = storage.layers
+        
+        group_doors = storage_layers.getByName('Doors')
+        
+        doors_grid   = doors.grid
+        storage_grid = self.grid32
+            
+        W = storage.width
+        H = storage.height
+        S = storage_grid.cell_size_w
+            
+        side_area = [
+            # 1 - Top-Left
+            [(0    , 0    , W / 2            , S                ),
+             (0    , S    , S                , H /2             ),
+             (S    , S    , S + (S / 2)      , S + (S / 2)      )],       
+            
+            # 2 - Top-Right
+            [(W / 2, 0    , W                , S                ),
+             (W - S, S    , W                , H / 2            ),
+             (W - S, S    , W - (S + (S / 2)), S + (S / 2)      )],
+            
+            # 3 - Bottom-Left
+            [(0    , H / 2, S                , H                ),
+             (S    , H - S, W / 2            , H                ),
+             (S    , H - S, S + (S / 2)      , H - (S + (S / 2)))],       
+            
+            # 4 - Bottom-Right
+            [(W - S, H / 2, W                , H                ),
+             (W / 2, H - S, W                , H                ),
+             (W - S, H - S, W - (S + (S / 2)), H - (S + (S / 2)))]        
+        ]
+        side_fill = [
+            (5          , 5          ),          # 1 - Top-Left
+            ((W - 1) - 5, 5          ),          # 2 - Top-Right
+            (5          , (H - 1) - 5),          # 3 - Bottom-Left
+            ((W - 1) - 5, (H - 1) - 5)           # 4 - Bottom-Right
+        ]
+            
+        if min(storage_grid.cols, storage_grid.rows) == 2:
+            max_lamina_x  = 1
+            max_lamina_y  = 1
+            max_lamina    = 2
+
+            if storage_grid.cols >= storage_grid.rows:
+                orientation = 'x'
+            else:
+                orientation = 'y'
+
+            step_offset    = (storage_grid.cell_size_w / 2) / float(self.maxDoorStep - 1)
+            lamina_ratio_x = iif(orientation == 'x', 0, 1)
+            lamina_ratio_y = iif(orientation == 'y', 0, 1)
+            
+            max_length = max(storage_grid.cols, storage_grid.rows) / 2
+            small_mode  = true
+        
+        else:
+            max_lamina_x  = storage_grid.cols / 2
+            max_lamina_y  = storage_grid.rows / 2
+            max_lamina    = max(max_lamina_x, max_lamina_y)
+            
+            orientation = 'xy'
+            
+            step_offset    = storage_grid.cell_size_w / float(self.maxDoorStep - 1)
+            lamina_ratio_x = (max_lamina_x - 1) / float(max(max_lamina - 1, 1))
+            lamina_ratio_y = (max_lamina_y - 1) / float(max(max_lamina - 1, 1))
+            
+            small_mode = false
+            
+        # print(max_lamina, max_lamina_x, max_lamina_y, lamina_ratio_x, lamina_ratio_y, step_offset)
+            
+        dl1 = doors_layers.getByName('Doors 1')
+        dl2 = doors_layers.getByName('Doors 2')
+        dn1 = doors_layers.getByName('Normals 1')
+        dn2 = doors_layers.getByName('Normals 2')
+
+        ri33  = storage_layers.getByName("Ri - 33%") 
+        ri66  = storage_layers.getByName("Ri - 66%")         
+
+        damage_selection_name = ['', self.roof_sel_33, self.roof_sel_66]            
+        damage_source_layer   = [None, ri33, ri66]          # type: list[Layer]
+
+        doors_color = [ ]
+        doors_layers.hideAll()
+        
+        dl1.activate(true)
+        doors.pipette(16, 16)
+        doors_color.append(PSP.getCurrentColor())
+        dl1.hide()
+        
+        dn1.activate(true)
+        doors.pipette(16, 16)
+        doors_color.append(PSP.getCurrentColor())
+        dn1.hide()
+
+        doors_layers.hideAll()
+            
+        #endregion
+        
+        layer_name = ['D']
+        layer_last_sibling = group_doors.getByName('temp')
+        
+        layers_type = [ ]                                                                           # type: list[Layer]
+        
+        for type_id, type_name in [(0, 'i'), (1, 'n')]:
+            # Complete the layer name for this level.
+            layer_name.append(type_name)
+
+            layers_damage = [ ]                                                                     # type: list[Layer]
+
+            src_door_layers = [[dl1, dl2], [dn1, dn2]][type_id]                                     # type: list[Layer]
+            
+            src_door_layers[0].show()
+            src_door_layers[1].show()
+            
+            for damage_id, damage_name in [(0, '0%'), (1, '33%'), (2, '66%')]:
+                # Complete the layer name for this level.
+                layer_name.append(' - ' + damage_name)
+            
+                layers_step = [ ]                                                                   # type: list[Layer]
+
+                # Prepare the layer cache to build faster later.
+                if damage_id == 0:
+                    first_layer_cache  = [ ]       # type: list[list[Layer]]
+                else:
+                    damage_layer_cache = [ ]       # type: list[list[Layer]]
+            
+                for step_id in range(self.maxDoorStep):
+                    # Complete the layer name for this level.
+                    layer_name.append(' - S:' + str(step_id))
+                    
+                    layers_lamina = [ ]                                                             # type: list[Layer]
+
+                    for lamina_id in range(max_lamina - 1):
+                        # Complete the layer name for this level.
+                        layer_name.append(' - L:' + str(lamina_id))
+                        
+                        layers_side  = [ ]                                                          # type: list[Layer]
+                        lamina_parts = [ ]      # type: list[tuple[int, int, int, int, int]]
+
+                        if small_mode == true:
+                            #   src is relative to the "Doors" image center, expending bottom-right.
+                            #   Remind the lamina in slim mode is a simple line.
+
+                            for p in range(max_length):
+                                if orientation == 'x':
+                                    lamina_parts.append((p, 0, 1, 1, 3))
+                                else:
+                                    lamina_parts.append((0, p, 1, 3, 1))
+                                
+                            for p in range(max_length, max_length * 2):
+                                if orientation == 'x':
+                                    lamina_parts.append((p, 0, 1, -2, 3))
+                                else:
+                                    lamina_parts.append((0, p, 1, 3, -2))
+                        else:
+                            # Iterate through the storage grid to gather witch lamina parts will be copied.
+                            for lamina_x in range(lamina_id + 1):
+                                for lamina_y in range(lamina_id + 1):
+
+                                    # print('for:', lamina_x, lamina_y)
+
+                                    # Skip lamina part outside the image. (if the storage is not a square)
+                                    if lamina_x >= max_lamina_x or lamina_y >= max_lamina_y:
+                                        continue
+                                    
+                                    # Skip lamina part outside the current lamina shape. (ie: previous made lamina in the center)
+                                    if lamina_x < lamina_id and lamina_y < lamina_id:
+                                        continue
+
+                                    # region 
+                                    # Get the lamina source part position in the doors image :
+                                    
+                                    #   src is relative to the "Doors" image center, expending bottom-right.
+                                    #   Remind the lamina is a L shape made of one row and one column with a corner.
+                                    src_lamina_part_x = 0
+                                    src_lamina_part_y = 0
+                                    src_lamina_layer  = 0
+
+                                    if lamina_y == 0:
+                                        # Column part : column start (first row at top)
+                                        src_lamina_part_x = min(lamina_x, 2)
+                                        src_lamina_layer  = src_lamina_part_x % 2
+                                        
+                                    elif lamina_y == lamina_id: 
+                                        # Here is the row part.
+                                        if lamina_x == 0:
+                                            # Row part : row start (first column)
+                                            src_lamina_part_y = min(lamina_y, 2)
+                                            src_lamina_layer  = src_lamina_part_y % 2
+                                            
+                                        elif lamina_x == lamina_id - 1:
+                                            # Row part : penultimate column (just beside the corner)
+                                            src_lamina_part_x = 1
+                                            src_lamina_part_y = 2
+                                            src_lamina_layer  = 0
+                                                
+                                        elif lamina_x == lamina_id:
+                                            # Corner part : last column, last row
+                                            src_lamina_part_x = 1
+                                            src_lamina_part_y = 1
+                                            src_lamina_layer  = 1
+                                            
+                                        else:
+                                            # Row part : middle
+                                            src_lamina_part_x = 1
+                                            src_lamina_part_y = 3
+                                            src_lamina_layer  = 1
+
+                                    else:
+                                        # Column part
+                                        src_lamina_part_y = 1
+                                        if lamina_y == lamina_id - 1:
+                                            # Column part : penultimate row
+                                            src_lamina_part_x = 2
+                                            src_lamina_layer  = 0
+                                        else:
+                                            # Column part : middle
+                                            src_lamina_part_x = 3
+                                            src_lamina_layer  = 1
+                                    # endregion
+                                    
+                                    if lamina_x < self.cols - 1 and lamina_y < self.rows - 1:
+                                        # Save the data for the drawing below.
+                                        lamina_parts.append((lamina_x, lamina_y, src_lamina_layer, src_lamina_part_x, src_lamina_part_y))        
+                                    
+                                    # If we are on a corner, we need to add the small inner corner part too.
+                                    if lamina_x == lamina_y and lamina_x > 0:
+                                        lamina_parts.append((lamina_x - 1, lamina_y - 1, src_lamina_layer, src_lamina_part_x - 1, src_lamina_part_y - 1))        
+                        
+                        # Prepare the layer cache to build faster later.
+                        if damage_id == 0 and step_id == 0:
+                            first_layer_cache.append([ ])
+                        elif damage_id > 0 and step_id == 0:
+                            damage_layer_cache.append([ ])
+                                            
+                        for side_id, side_name in [(0, 'TL'), (1, 'TR'), (2, 'BL'), (3, 'BR')]:
+                            
+                            if small_mode == true:
+                                if orientation == 'x' and side_id in [0, 2]:
+                                    if step_id == 0:
+                                        if damage_id == 0:
+                                            first_layer_cache[lamina_id].append(side_name)
+                                        else:
+                                            damage_layer_cache[lamina_id].append(side_name)
+                                    continue
+                                elif orientation == 'y' and side_id in [0, 1]:
+                                    if step_id == 0:
+                                        if damage_id == 0:
+                                            first_layer_cache[lamina_id].append(side_name)
+                                        else:
+                                            damage_layer_cache[lamina_id].append(side_name)
+                                    continue
+                            
+                            # Complete the layer name for this level.
+                            layer_name.append(':' + side_name)
+                            
+                            # Create the new side layer and store it.
+                            layer_side = layer_last_sibling.addSibling(''.join(layer_name))
+                            layers_side.append(layer_side)
+
+                            # Prepare the layer cache to build faster later.
+                            if damage_id == 0 and step_id == 0:
+                                first_layer_cache[lamina_id].append(layer_side)
+                                
+                                for part_detail in lamina_parts:
+                                    dst_cell_x, dst_cell_y, src_layer_id, src_cell_x, src_cell_y = part_detail
+
+                                    # Convert the destination's bottom-right coords to the current side.
+                                    if small_mode == true:
+                                        if side_id == 3:
+                                            if orientation == 'x' :
+                                                dst_cell_y += 1
+                                            elif orientation == 'y':
+                                                dst_cell_x += 1
+
+                                    else:
+                                        dst_cell_x, dst_cell_y = doors_grid.mirrorRelativeCoord(side_id, dst_cell_x, dst_cell_y)
+                                        dst_cell_x += storage_grid.cols / 2
+                                        dst_cell_y += storage_grid.rows / 2
+                                    
+                                    # Convert the source's bottom-right coords to the current side.
+                                    src_cell_x, src_cell_y = doors_grid.mirrorRelativeCoord(side_id, src_cell_x, src_cell_y)
+                                    src_cell_x += doors_grid.cols / 2
+                                    src_cell_y += doors_grid.rows / 2
+                                    
+                                    src_layer = src_door_layers[src_layer_id]
+                                                            
+                                    src_layer.activate()
+                                    src_layer.selection.selectArea(*doors_grid.getCellArea(src_cell_x, src_cell_y))
+                                    src_layer.selection.copy()
+                    
+                                    layer_side.pasteClipboard(*storage_grid.getPosOffset(dst_cell_x, dst_cell_y))
+                    
+                    
+                                if small_mode == true:
+                                    storage.selection.load('Roof Border Area')
+                                    storage.selection.delete()
+                                    storage.selection.unselect()
+                    
+                            else: # use the layer cache.
+                                if damage_id == 0 or step_id == 0:
+                                    first_layer_cache[lamina_id][side_id].activate()
+                                else:
+                                    damage_layer_cache[lamina_id][side_id].activate()
+                                
+                                storage.selection.selectAll()
+                                storage.selection.copy()
+                            
+                                layer_side.pasteClipboard(0, 0)
+        
+                            if damage_id > 0 and step_id == 0:
+                                damage_layer_cache[lamina_id].append(layer_side)
+                                
+                                storage.selection.load(damage_selection_name[damage_id])
+                                storage.selection.delete()
+                                
+                                if type_id == 0:
+                                    damage_source_layer[damage_id].activate()
+                                    storage.selection.selectAll()
+                                    storage.selection.copy()
+
+                                    layer_side.pasteClipboard(0, 0)
+
+                                    first_layer_cache[lamina_id][side_id].activate()
+                                    pos_x, pos_y = storage_grid.mirrorRelativeCoord((side_id + 1) % 4, 16, 16, 0)
+                                    pos_x += W / 2
+                                    pos_y += H / 2
+                                    storage.selection.SelectAreaW(pos_x, pos_y)
+                                    layer_side.activate()
+                                    storage.selection.delete()
+                                
+                                storage.selection.unselect()
+                                                        
+                            # Move the lamina       
+                            if step_id > 0:
+                                
+                                move_offset_x = (step_offset * step_id) * ((max_lamina - 1) - lamina_id) * lamina_ratio_x
+                                move_offset_y = (step_offset * step_id) * ((max_lamina - 1) - lamina_id) * lamina_ratio_y
+                                
+                                move_x, move_y = storage_grid.mirrorRelativeCoord(side_id, move_offset_x, move_offset_y, 0)
+                                
+                                layer_side.move(move_x, move_y)
+        
+                            layer_last_sibling = layer_side
+                            layer_name.pop(-1)              # remove side from the name.
+                        
+                        # Move all side layers in their lamina group
+                        layer_lamina = layers_side.pop(0).addGroup(''.join(layer_name))
+                        layers_lamina.append(layer_lamina)
+                        while len(layers_side) > 0:
+                            layers_side.pop(0).moveToGroupBelow()
+                        
+                        layer_last_sibling = layer_lamina
+                        layer_name.pop(-1)                  # remove lamina from the name.
+
+                    # Move all lamina groups in their step group
+                    layer_step = layers_lamina.pop(0).addGroup(''.join(layer_name))
+                    layers_step.append(layer_step)
+                    while len(layers_lamina) > 0:
+                        layers_lamina.pop(0).moveToGroupBelow()
+
+                    if damage_id == 0 and step_id == 0:
+                        first_layer_cache.append(layer_step)
+                        layer_step.hideChildren()
+                    elif step_id == 0:
+                        damage_layer_cache.append(layer_step)
+                        layer_step.hideChildren()
+                    else:
+                        layer_step.mergeGroup()
+                    
+                    layer_step.hide()            
+
+                    layer_last_sibling = layer_step
+                    layer_name.pop(-1)                      # remove step from the name.
+
+                # Move all step groups in their damage group
+                layer_damage = layers_step.pop(0).addGroup(''.join(layer_name))
+                layers_damage.append(layer_damage)
+                while len(layers_step) > 0:
+                    layers_step.pop(0).moveToGroupBelow()
+
+                if damage_id > 0 and small_mode == false:
+                    damage_layer_cache[-1].hideChildren()
+                    
+                    for side_id in range(4):
+                        layer_side = damage_layer_cache[-2][side_id]
+                        
+                        layer_side.activate(true)
+                        
+                        storage.selection.unselect()
+                        
+                        layer_side.fill(side_fill[side_id][0], side_fill[side_id][1], doors_color[type_id])
+                        
+                        storage.selection.load(damage_selection_name[damage_id])
+                        storage.selection.delete()
+
+                        if type_id == 0:
+                            damage_source_layer[damage_id].activate()
+                            storage.selection.selectAll()
+                            storage.selection.copy()
+
+                            layer_side.pasteClipboard(0, 0)
+
+                        first_layer_cache[-2][side_id].activate()
+                        pos_x, pos_y = storage_grid.mirrorRelativeCoord((side_id + 1) % 4, 16, 16, 0)
+                        pos_x += W / 2
+                        pos_y += H / 2
+                        storage.selection.SelectAreaW(pos_x, pos_y)
+                        storage.selection.invert()
+                        
+                        for sel in range(3):
+                            x1, y1, x2, y2 = side_area[side_id][sel]
+                            storage.selection.selectArea(x1, y1, x2, y2, true)
+                        
+                        layer_side.activate()
+                        storage.selection.invert()
+                        storage.selection.delete()
+                        
+                        storage.selection.load('Roof Border Area')
+                        storage.selection.delete()
+                        storage.selection.unselect()
+                        
+                        layer_side.hide()
+
+                    # Merge the layers used as damage model.
+                    damage_layer_cache[-1].mergeGroup()
+                    damage_layer_cache[-1].hide()
+
+                layer_last_sibling = layer_damage
+                layer_name.pop(-1)                          # remove damage from the name.
+
+            # Move all damage groups in their type group
+            layer_type = layers_damage.pop(0).addGroup(''.join(layer_name))
+            layers_type.append(layer_type)
+            while len(layers_damage) > 0:
+                layers_damage.pop(0).moveToGroupBelow()
+
+            if small_mode == false:
+                first_layer_cache[-1].hideChildren()
+                
+                for side_id in range(4):
+                    layer_side = first_layer_cache[-2][side_id]
+                    
+                    layer_side.activate(true)
+                    
+                    storage.selection.unselect()
+                    for sel in range(3):
+                        x1, y1, x2, y2 = side_area[side_id][sel]
+                        storage.selection.selectArea(x1, y1, x2, y2, true)
+                    
+                    layer_side.fill(side_fill[side_id][0], side_fill[side_id][1], doors_color[type_id])
+                    
+                    storage.selection.load('Roof Border Area')
+                    storage.selection.delete()
+                    storage.selection.unselect()
+
+            # Merge the layers used as model.
+            first_layer_cache[-1].mergeGroup()
+            first_layer_cache[-1].hide()
+            
+            src_door_layers[0].hide()
+            src_door_layers[1].hide()
+
+            layer_last_sibling = layer_type
+            layer_name.pop(-1)                              # remove type from the name.
+                                    
+        storage.selection.unselect()   
+
+    def blueprintMode(self):
+        
+        storage_layers = self.image.layers
+        
+        storage_layers.hideAll()
+        
+        fl = storage_layers.getByName('F - 0%')
+        fn = storage_layers.getByName('F - No Wall')
+        wl = storage_layers.getByName('W - 0%')
+        
+        wl.activate()
+        
+        settings = {
+            'General': {
+                'Name': 'colour 1'
+            },
+            'ColorBalance': {
+                'PreserveLuminance': true, 
+                'Shadow': (0,-100,100), 
+                'Midtone': (-100,-100,100),
+                'Highlight': (-50,0,100)
+            }
+        }
+        
+        PSP.callAPI('NewAdjustmentLayerColorBalance', settings, self.image.getPSPImage())
+                
+        settings = {
+            'General': {
+                'Name': 'colour 2'
+            },
+            'CurveParams': {
+                'RGB': [(0,0),(255,255)], 
+                'Red': [(0,0),(255,255)], 
+                'Green': [(0,0),(255,255)], 
+                'Blue': [(0,144),(216,255)]
+            }
+        }
+            
+        PSP.callAPI('NewAdjustmentLayerCurves', settings, self.image.getPSPImage())
+        
+        layers = wl.parent.layers
+        for index in range(len(layers)):
+            if layers[index] is wl:
+                layers.insert(index + 1, 'FakeLayer')
+                layers.insert(index + 1, 'FakeLayer')
+                
+        fl.activate(true)
+        fl.setOpacity(30)
+        
+        fn.activate(true)
+        settings = {
+            'General': {
+                'Name': 'colour 3'
+            },
+            'HSL': {
+                'Colorize': false, 
+                'Master': (0,-100,0), 
+                # 'MasterColorize': (0,0,0), 
+                # 'Red': (0,0,0,315,345,15,45), 
+                # 'Green': (0,0,0,75,105,135,165), 
+                # 'Blue': (0,0,0,195,225,255,285), 
+                # 'Cyan': (0,0,0,135,165,195,225), 
+                # 'Magenta': (0,0,0,255,285,315,345), 
+                # 'Yellow': (0,0,0,15,45,75,105)
+            }            
+        }
+        
+        PSP.callAPI('NewAdjustmentLayerHSL', settings, self.image.getPSPImage())
+        
+        settings = {
+            'General': {
+                'Name': 'colour 4'
+            },
+            'HSL': {
+                'Colorize': true, 
+                # 'Master': (0,0,0), 
+                'MasterColorize': (216,100,0), 
+                # 'Red': (0,0,0,315,345,15,45), 
+                # 'Green': (0,0,0,75,105,135,165), 
+                # 'Blue': (0,0,0,195,225,255,285), 
+                # 'Cyan': (0,0,0,135,165,195,225), 
+                # 'Magenta': (0,0,0,255,285,315,345), 
+                # 'Yellow': (0,0,0,15,45,75,105)
+            }            
+        }
+        
+        PSP.callAPI('NewAdjustmentLayerHSL', settings, self.image.getPSPImage())
+
+        layers = fn.parent.layers
+        for index in range(len(layers)):
+            if layers[index] is fn:
+                layers.insert(index + 1, 'FakeLayer')
+                layers.insert(index + 1, 'FakeLayer')    
+    
+    def saveAll(self):
+            
+        image  = self.image
+        layers = image.layers
+        folder = self.folder
+    
+        # Create the folder if it doesn't exist.
+        try: 
+            os.makedirs(folder)
+        except OSError:
+            if not os.path.isdir(folder):
+                raise        
+        
+        layers.hideAll()
+        
+        # Floors
+        fi00 = layers.getByName('F - 0%')
+        fi33 = layers.getByName('Fi - 33%')
+        fi66 = layers.getByName('Fi - 66%')
+        
+        fm33 = layers.getByName('F - 33%')
+        fm66 = layers.getByName('F - 66%')
+        
+        fs66 = layers.getByName('Fs - 66%')
+            
+        fnw  = layers.getByName('F - No Wall')
+            
+        # Walls
+        wl00 = layers.getByName('W - 0%')
+        wl33 = layers.getByName('W - 33%')
+        wl66 = layers.getByName('W - 66%')
+            
+        # Roofs
+        ri00 = layers.getByName('R - 0%')
+        ri33 = layers.getByName('Ri - 33%')
+        ri66 = layers.getByName('Ri - 66%')
+        
+        rm33 = layers.getByName('R - 33%')
+        rm66 = layers.getByName('R - 66%')
+        
+        rn00 = layers.getByName('Rn - 0%')
+        
+            
+        # region Floors    
+        
+        fi00.show(true)
+        image.save(folder + '\\floor.png')
+        
+        fnw.show()
+        image.save(folder + '\\nw_floor.png')
+        fnw.hide()
+        
+        fs66.show()
+        
+        fm33.show()
+        fi33.show()
+        image.save(folder + '\\floor_33.png')
+        
+        fnw.show()
+        image.save(folder + '\\nw_floor_33.png')
+        fnw.hide()
+        
+        fm33.hide()
+        fi33.hide()
+
+        fm66.show()
+        fi66.show()
+        image.save(folder + '\\floor_66.png')
+        
+        fnw.show()
+        image.save(folder + '\\nw_floor_66.png')
+        fnw.hide()
+
+        fm66.hide()
+        fi66.hide()
+        
+        fs66.hide()
+        
+        # fi00 is still visible at this step !
+
+        # endregion
+
+        # region Icon
+
+        fnw.show()
+        image.save(folder + '\\nw_icon.png')
+        fnw.hide()
+
+        wl00.show(true)
+        image.save(folder + '\\icon.png')
+        fi00.hide()
+
+        # wl00 is still visible at this step !
+
+        # endregion
+
+        # region Walls
+
+        image.save(folder + '\\walls.png')
+        wl00.hide()
+
+        wl33.show()
+        image.save(folder + '\\walls_33.png')
+        wl33.hide()
+
+        wl66.show()
+        image.save(folder + '\\walls_66.png')
+        wl66.hide()
+
+        # endregion
+
+        # region Roofs + Doors
+
+        ri00.show(true)
+        
+        for step_id in range(self.maxDoorStep):
+            layer = layers.getByName('Di - 0% - S:' + str(step_id))
+            
+            layer.show(true)
+            image.save(folder + '\\roof' + str(step_id + 1) + '.png')
+            layer.hide()
+            
+        rm33.show()
+        ri33.show()
+
+        for step_id in range(self.maxDoorStep):
+            layer = layers.getByName('Di - 33% - S:' + str(step_id))
+            
+            layer.show(true)
+            image.save(folder + '\\roof' + str(step_id + 1) + '_33.png')
+            layer.hide()
+
+        rm33.hide()
+        ri33.hide()
+        
+        rm66.show()
+        ri66.show()
+
+
+        for step_id in range(self.maxDoorStep):
+            layer = layers.getByName('Di - 66% - S:' + str(step_id))
+            
+            layer.show(true)
+            image.save(folder + '\\roof' + str(step_id + 1) + '_66.png')
+            layer.hide()
+
+        rm66.hide()
+        ri66.hide()
+
+        ri00.hide()
+
+        # endregion
+
+        # region Roofs + Doors (normals)
+
+        rn00.show(true)
+        
+        for step_id in range(self.maxDoorStep):
+            layer = layers.getByName('Dn - 0% - S:' + str(step_id))
+            
+            layer.show(true)
+            image.save(folder + '\\roof_normals' + str(step_id + 1) + '.png')
+            layer.hide()
+            
+        rm33.show()
+
+        for step_id in range(self.maxDoorStep):
+            layer = layers.getByName('Dn - 33% - S:' + str(step_id))
+            
+            layer.show(true)
+            image.save(folder + '\\roof_normals' + str(step_id + 1) + '_33.png')
+            layer.hide()
+
+        rm33.hide()
+        
+        rm66.show()
+
+
+        for step_id in range(self.maxDoorStep):
+            layer = layers.getByName('Dn - 66% - S:' + str(step_id))
+            
+            layer.show(true)
+            image.save(folder + '\\roof_normals' + str(step_id + 1) + '_66.png')
+            layer.hide()
+
+        rm66.hide()
+
+        # endregion
+
+        # region Blueprint
+        
+        self.blueprintMode()
+        
+        image.save(folder + '\\nw_blueprints.png')
+                
+        wl00.show(true)
+        image.save(folder + '\\blueprints.png')
+
+        # endregion
+        
+        # region Translation
+
+        W    = self.cols
+        H    = self.rows
+        S    = W * H
+        
+        rules = open(ModPath + '\\strings\\en.rules', 'a')
+        
+        rules.write('\n')
+        rules.write('    Foo' + self.name.capitalize() + '       = "Storage Bay"'                                                                 + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Icon   = &Foo' + self.name.capitalize()                                                 + '\n')
+        if S == 1:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Stores ' + str(S) + ' stack of resources of any types."'                  + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Stores ' + str(S) + ' stack of resources of any types. (Without wall)"'                  + '\n')
+        else:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Stores ' + str(S) + ' stacks of resources of any types."'                 + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Stores ' + str(S) + ' stacks of resources of any types. (Without wall)"'                 + '\n')
+
+        rules.close()
+
+        rules = open(ModPath + '\\strings\\de.rules', 'a')
+        
+        rules.write('\n')
+        rules.write('    Foo' + self.name.capitalize() + '       = "Lagerhalle"'                                                                  + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Icon   = &Foo' + self.name.capitalize()                                                 + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Lagert ' + str(S) + ' Stapel von Ressourcen jeder Art."'                     + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Lagert ' + str(S) + ' Stapel von Ressourcen jeder Art. (Ohne Wand)"'                     + '\n')
+
+        rules.close()
+
+        rules = open(ModPath + '\\strings\\es.rules', 'a')
+        
+        rules.write('\n')
+        rules.write('    Foo' + self.name.capitalize() + '       = "Compartimento de almacenamiento"'                                             + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Icon   = "Almacenamiento"'                                                              + '\n')
+        if S == 1:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Almacena ' + str(S) + ' pila de recursos de cualquier tipo."'             + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Almacena ' + str(S) + ' pila de recursos de cualquier tipo. (Sin muro)"'             + '\n')
+        else:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Almacena ' + str(S) + ' pilas de recursos de cualquier tipo."'            + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Almacena ' + str(S) + ' pilas de recursos de cualquier tipo. (Sin muro)"'            + '\n')
+
+        rules.close()
+
+        rules = open(ModPath + '\\strings\\fr.rules', 'a')
+        
+        rules.write('\n')
+        rules.write('    Foo' + self.name.capitalize() + '       = "Soute"'                                                                       + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Icon   = &Foo' + self.name.capitalize()                                                 + '\n')
+        if S == 1:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Permet de stocker ' + str(S) + ' pile de n’importe quelle ressource."'    + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Permet de stocker ' + str(S) + ' pile de n’importe quelle ressource. (Sans mur)"'    + '\n')
+        else:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Permet de stocker ' + str(S) + ' piles de n’importe quelle ressource."'   + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Permet de stocker ' + str(S) + ' piles de n’importe quelle ressource. (Sans mur)"'   + '\n')
+
+        rules.close()
+
+        rules = open(ModPath + '\\strings\\ja.rules', 'a')
+        
+        rules.write('\n')
+        rules.write('    Foo' + self.name.capitalize() + '       = "倉庫"'                                                                         + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Icon   = &Foo' + self.name.capitalize()                                                 + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Desc   = "任意の資源を' + str(S) + 'スタック分格納します。"'                                  + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'DescNW = "任意の資源を' + str(S) + 'スタック分格納します。（壁なし）"'                                  + '\n')
+
+        rules.close()
+
+        rules = open(ModPath + '\\strings\\korean.rules', 'a')
+        
+        rules.write('\n')
+        rules.write('    Foo' + self.name.capitalize() + '       = "저장고"'                                                                       + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Icon   = &Foo' + self.name.capitalize()                                                 + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Desc   = "모든 유형의 자원을 보관할 수 있는 ' + str(S) + '칸의 슬롯을 제공합니다."'                + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'DescNW = "모든 유형의 자원을 보관할 수 있는 ' + str(S) + '칸의 슬롯을 제공합니다. (벽 없음)"'                + '\n')
+
+        rules.close()
+
+        rules = open(ModPath + '\\strings\\pt-br.rules', 'a')
+        
+        rules.write('\n')
+        rules.write('    Foo' + self.name.capitalize() + '       = "Baia de armazenamento"'                                                       + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Icon   = "Armazém"'                                                                     + '\n')
+        if S == 1:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Armazena ' + str(S) + ' pilha de recursos de qualquer tipo."'             + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Armazena ' + str(S) + ' pilha de recursos de qualquer tipo. (Sem parede)"'             + '\n')
+        else:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Armazena ' + str(S) + ' pilhas de recursos de qualquer tipo."'            + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Armazena ' + str(S) + ' pilhas de recursos de qualquer tipo. (Sem parede)"'            + '\n')
+
+        rules.close()
+
+        rules = open(ModPath + '\\strings\\ru.rules', 'a')
+        
+        rules.write('\n')
+        rules.write('    Foo' + self.name.capitalize() + '       = "Хранилище"'                                                                   + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Icon   = &Foo' + self.name.capitalize()                                                 + '\n')
+        if S == 1:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Хранит ' + str(S) + ' блок ресурсов любого вида."'                        + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Хранит ' + str(S) + ' блок ресурсов любого вида. (Без стены)"'                        + '\n')
+        elif 2 <= S % 10 <= 4 and not 11 <= S % 100 <= 14:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Хранит ' + str(S) + ' блока ресурсов любого вида."'                       + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Хранит ' + str(S) + ' блока ресурсов любого вида. (Без стены)"'                       + '\n')
+        else:
+            rules.write('    Foo' + self.name.capitalize() + 'Desc   = "Хранит ' + str(S) + ' блоков ресурсов любого вида."'                      + '\n')
+            rules.write('    Foo' + self.name.capitalize() + 'DescNW = "Хранит ' + str(S) + ' блоков ресурсов любого вида. (Без стены)"'                      + '\n')
+
+        rules.close()
+
+        rules = open(ModPath + '\\strings\\zh-cn.rules', 'a')
+        
+        rules.write('\n')
+        rules.write('    Foo' + self.name.capitalize() + '       = "存储室"'                                                                       + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Icon   = &Foo' + self.name.capitalize()                                                 + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'Desc   = "存储' + str(S) + '堆任何类型的资源。"'                                            + '\n')
+        rules.write('    Foo' + self.name.capitalize() + 'DescNW = "存储' + str(S) + '堆任何类型的资源。 （无墙）"'                                            + '\n')
+
+        rules.close()
+
+        # endregion
+
+        rules = open(ModPath + '\\mod.rules', 'a')
+        
+        rules.write('            &<' + self.name + '/' + self.name + '.rules>/Part'                                                             + '\n')
+        rules.write('            &<' + self.name + '/nw_' + self.name + '.rules>/Part'                                                             + '\n')
+
+        rules.close()
+
+    def makeIcon(self, icon_name, no_wall = false):
+        
+        icons = PSP.images['Icons']
+        
+        icon = PSP.openImage(self.folder + '\\' + icon_name)
+
+        ratio = self.icon_size / float(max(icon.width, icon.height))
+
+        new_width  = floor(min(icon.width  * ratio, self.icon_size))
+        new_height = floor(min(icon.height * ratio, self.icon_size))
+
+        icon.resize(new_width, new_height)
+                        
+        PSP.callAPI('LayerPromoteBackground', { }, icon.getPSPImage())
+        icon.resizeCanvas(self.icon_size, self.icon_size)
+        
+        if no_wall == true:
+            icons.layers.hideAll()
+            icons.layers.getByName('No Wall').activate(true)
+        
+            icons.selection.selectAll()
+            icons.selection.copy()
+            
+            icon.layers[0].pasteClipboard(0 - ((icon.width / 2) - 16), 0 - ((icon.height / 2) - 16))
+            icon.selection.unselect()
+        
+        settings = {
+            'Segments': [
+                {
+                    'Antialias': true, 
+                    'AutoKern': false, 
+                    'Bold': false, 
+                    'Italic': false, 
+                    'Fill': {
+                        'Color': (0,182,254), 
+                        'Pattern': None, 
+                        'Gradient': None, 
+                        'Texture': None, 
+                        'Identity': 'Material'
+                        }, 
+                    'Font': 'Arial Black', 
+                    'LineStyle': {
+                        'Name': '', 
+                        'FirstCap': ('', 0.25, 0.25), 
+                        'LastCap': ('', 0.25, 0.25), 
+                        'FirstSegCap': ('', 0.25), 
+                        'LastSegCap': ('', 0.25), 
+                        'UseSegmentCaps': false, 
+                        'Segments': []
+                        }, 
+                    'LineWidth': 1, 
+                    'PointSize': 16, 
+                    'SetText': App.Constants.Justify.Center, 
+                    'Start': (self.icon_size / 2, (self.icon_size / 2) + (16 / 2)), 
+                    'Stroke': {
+                        'Color': (26,50,100), 
+                        'Pattern': None, 
+                        'Gradient': None, 
+                        'Texture': None, 
+                        'Identity': 'Material'
+                        }
+                },
+                {
+                    'PointSize': 16, 
+                    'Characters': str(self.cols) + 'x' + str(self.rows)
+                }
+            ]
+        }
+        
+        PSP.callAPI('Text', settings, icon.getPSPImage())        
+        
+        settings = {
+            'Angle': -45,             
+        }
+
+        PSP.callAPI('VectorRotate', settings, icon.getPSPImage())        
+
+        icon.save(self.folder + '\\' + icon_name)
+
+        icon.close()
+
+    def writeRules(self, no_wall = false):
+        
+        if no_wall == true:
+            nw_ = 'nw_'
+            NW = 'NW'
+        else:        
+            nw_ = ''
+            NW = ''
+        
+        rules = open(self.folder + '\\' + nw_ + self.name + '.rules', 'w')
+        
+        print("Generate RULES file for : " + self.folder + '\\' + nw_ + self.name + '.rules')
+        
+        # rules.write('' + '\n')
+        
+        name = self.name
+        W    = self.cols
+        H    = self.rows
+        S    = W * H
+        
+        is_square = iif(W == H, true, false)
+        
+        rules.write('Part : <./Data/ships/terran/base_part_terran.rules>/Part'                      + '\n')
+        rules.write('{'                                                                             + '\n')
+        rules.write('    ID = FooPhoenix.' + nw_ + name                                             + '\n')
+        rules.write('    OthersIDs = []'                                                            + '\n')
+        # // If you still need the SwitchyWitch mod support, please add the next IDs in the "OthersIDs array" :
+        # // SwitchyWitch.storage_1x1_hatchless, SwitchyWitch.storage_1x1
+        rules.write('    '                                                                          + '\n')
+        rules.write('    NameKey        = "Parts/Foo' + name.capitalize() + '"'                     + '\n')
+        rules.write('    IconNameKey    = "Parts/Foo' + name.capitalize() + 'Icon"'                 + '\n')
+        rules.write('    DescriptionKey = "Parts/Foo' + name.capitalize() + 'Desc' + NW + '"'       + '\n')
+        rules.write('    '                                                                          + '\n')
+        rules.write('    EditorGroup     = "Storage' + NW + '"'                                               + '\n')
+        rules.write('    SelectionTypeID = "storage"'                                               + '\n')
+        rules.write('    TypeCategories  = [storage' + iif(no_wall, ', storage_nowall', '') + ']'   + '\n')
+        rules.write('    '                                                                          + '\n')
+        
+        if no_wall == true:
+            rules.write('    IsWalled   = false'                                                      + '\n')
+            rules.write('    IsExternal = true'                                                                      + '\n')
+            rules.write('    '                                                                      + '\n')
+            
+        rules.write('    Resources'                                                                 + '\n')
+        rules.write('    ['                                                                         + '\n')
+        rules.write('        [steel, ' + str((12 * S) - iif(no_wall, W + H, 0)) + ']'                        + '\n')
+        rules.write('    ]'                                                                         + '\n')
+        rules.write('    '                                                                          + '\n')
+        rules.write('    Size = [' + str(W) + ', ' + str(H) + ']'                                   + '\n')
+
+        if is_square == false:
+            rules.write('    FlipHRotate  = [0, 1, 2, 3] // Disable flipping UI.'                    + '\n')
+            rules.write('    FlipVRotate  = [0, 1, 2, 3] // Disable flipping UI.'                    + '\n')
+
+        rules.write('    MaxHealth    = ' + str(iif(no_wall, 800, 1000) * S)                           + '\n')
+        rules.write('    IsRotateable = ' + iif(is_square, 'false', 'true')                         + '\n')
+        rules.write('    IsFlippable  = false'                                                                          + '\n')
+        rules.write('    '                                                                          + '\n')
+        rules.write('    ReceivableBuffs : ^/0/ReceivableBuffs []'                                  + '\n')
+        rules.write('    IgnoreRotationForMirroredSelection = ' + iif(is_square, 'true', 'false')   + '\n')
+        rules.write('    '                                                                          + '\n')
+        rules.write('    EditorIcon'                                                                + '\n')
+        rules.write('    {'                                                                         + '\n')
+        rules.write('        Texture'                                                               + '\n')
+        rules.write('        {'                                                                     + '\n')
+        rules.write('            File = "' + nw_ + 'icon.png"'                                      + '\n')
+        rules.write('            SampleMode = Linear'                                               + '\n')
+        rules.write('        }'                                                                     + '\n')
+        rules.write('        Size = [' + str(self.icon_size) + ', ' + str(self.icon_size) + ']'     + '\n')
+        rules.write('    }'                                                                         + '\n')
+        rules.write('    '                                                                          + '\n')
+        rules.write('    Components : ^/0/Components'                                               + '\n')
+        rules.write('    {'                                                                         + '\n')
+        rules.write('        Storage'                                                               + '\n')
+        rules.write('        {'                                                                     + '\n')
+        rules.write('            Type = FlexResourceGrid'                                           + '\n')
+        rules.write('            GridRect = [0, 0, ' + str(W) + ', ' + str(H) + ']'                 + '\n')
+        if not (W == 2 and H == 2 and no_wall == false):
+            rules.write('            OverridePriorityPart = cosmoteer.storage_2x2'                  + '\n')
+        rules.write('            Layer = "doodads_low"'                                             + '\n')
+        rules.write('            SpriteInset = [' + str(self.wall_offset_x) + '/64, ' + str(self.wall_offset_y) + '/64, ' + str(self.wall_offset_x) + '/64, ' + str(self.wall_offset_y) + '/64]' + '\n')
+        rules.write('            RandomSpriteRotation = true'                                       + '\n')
+        rules.write('            AllowExternalPickupAndDelivery = true'                             + '\n')
+        rules.write('        }'                                                                     + '\n')
+        rules.write('        '                                                                      + '\n')
+
+        if no_wall == true:
+            rules.write('        WallsBlend : <../storage_walls_blend/walls.rules>'  + '\n')
+            rules.write('        {'  + '\n')
+            rules.write('            Type = BlendSpriteGrid'  + '\n')
+            rules.write('            IncludeWhenUnderConstruction = true'  + '\n')
+            rules.write('            IncludeWhenNotUnderConstruction = true'  + '\n')
+            rules.write('            AllowUndefinedBlendSprites = true'  + '\n')
+            rules.write('            AlwaysBlendWithSelf = true            '  + '\n')
+            rules.write('            BlendsWithCategories = [storage_nowall]'  + '\n')
+            rules.write('        }'  + '\n')
+            rules.write('        '                                                                      + '\n')
+
+        rules.write('        Graphics'                                                              + '\n')
+        rules.write('        {'                                                                     + '\n')
+        rules.write('            Type = Graphics'                                                   + '\n')
+        rules.write('            Location = [' + str(W / float(2)) + ', ' + str(H / float(2)) + ']' + '\n')
+        rules.write('            Floor'                                                             + '\n')
+        rules.write('            {'                                                                 + '\n')
+        rules.write('                Layer = "floors"'                                              + '\n')
+        rules.write('                DamageLevels'                                                  + '\n')
+        rules.write('                ['                                                             + '\n')
+        
+        for type in ['', '_33', '_66']:
+            rules.write('                    {'                                                     + '\n')
+            rules.write('                        File = "' + nw_ + 'floor' + type + '.png"'         + '\n')
+            rules.write('                        Size = [' + str(W) + ', ' + str(H) + ']'           + '\n')
+            rules.write('                    }'                                                     + '\n')
+
+        rules.write('                ]'                                                             + '\n')
+        rules.write('            }'                                                                 + '\n')
+
+        if no_wall == false:
+            rules.write('            Walls'                                                             + '\n')
+            rules.write('            {'                                                                 + '\n')
+            rules.write('                Layer = "walls"'                                               + '\n')
+            rules.write('                DamageLevels'                                                  + '\n')
+            rules.write('                ['                                                             + '\n')
+
+            for type in ['', '_33', '_66']:
+                rules.write('                    {'                                                     + '\n')
+                rules.write('                        File = "walls' + type + '.png"'                    + '\n')
+                rules.write('                        Size = [' + str(W) + ', ' + str(H) + ']'           + '\n')
+                rules.write('                    }'                                                     + '\n')
+
+            rules.write('                ]'                                                             + '\n')
+            rules.write('            }'                                                                 + '\n')
+        rules.write('        }'                                                                     + '\n')
+        rules.write('        '                                                                      + '\n')
+        rules.write('        RoofDoorOpenToggle'                                                    + '\n')
+        rules.write('        {'                                                                     + '\n')
+        rules.write('            Type = CrewDestinationProximityToggle'                             + '\n')
+        rules.write('            Distance = 3'                                                      + '\n')
+        rules.write('        }'                                                                     + '\n')
+        rules.write('        '                                                                      + '\n')
+        rules.write('        RoofDoorSprite'                                                        + '\n')
+        rules.write('        {'                                                                     + '\n')
+        rules.write('            Type = OpenCloseSprite'                                            + '\n')
+        rules.write('            Location = [' + str(W / float(2)) + ', ' + str(H / float(2)) + ']' + '\n')
+        rules.write('            OperationalToggle = RoofDoorOpenToggle'                            + '\n')
+        rules.write('            Layer = "roofs"'                                                   + '\n')
+        rules.write('            OpenDamageLevels'                                                  + '\n')
+        rules.write('            ['                                                                 + '\n')
+        
+        for type in ['', '_33', '_66']:
+            rules.write('                {'                                                         + '\n')
+            rules.write('                    AnimationFiles'                                        + '\n')
+            rules.write('                    ['                                                     + '\n')
+            
+            for step in range(1, self.maxDoorStep + 1):
+                rules.write('                        "roof' + str(step) + type + '.png"'            + '\n')
+                
+            rules.write('                    ]'                                                     + '\n')
+            rules.write('                    NormalsAnimationFiles'                                 + '\n')
+            rules.write('                    ['                                                     + '\n')
+            
+            for step in range(1, self.maxDoorStep + 1):
+                rules.write('                        "roof_normals' + str(step) + '.png"'           + '\n')
+                
+            rules.write('                    ]'                                                     + '\n')
+            rules.write('                    Size = [' + str(W) + ', ' + str(H) + ']'               + '\n')
+            rules.write('                    AnimationInterval = 0.06'                              + '\n')
+            rules.write('                    AnimationStartTime = MinValue'                         + '\n')
+            rules.write('                    ClampAnimation = true'                                 + '\n')
+            rules.write('                }'                                                         + '\n')
+            
+        rules.write('            ]'                                                                 + '\n')
+        rules.write('            ClosedDamageLevels'                                                + '\n')
+        rules.write('            ['                                                                 + '\n')
+
+        for type in ['', '_33', '_66']:
+            rules.write('                {'                                                         + '\n')
+            rules.write('                    AnimationFiles'                                        + '\n')
+            rules.write('                    ['                                                     + '\n')
+            
+            for step in range(self.maxDoorStep, 0, -1):
+                rules.write('                        "roof' + str(step) + type + '.png"'            + '\n')
+                
+            rules.write('                    ]'                                                     + '\n')
+            rules.write('                    NormalsAnimationFiles'                                 + '\n')
+            rules.write('                    ['                                                     + '\n')
+            
+            for step in range(self.maxDoorStep, 0, -1):
+                rules.write('                        "roof_normals' + str(step) + '.png"'           + '\n')
+                
+            rules.write('                    ]'                                                     + '\n')
+            rules.write('                    Size = [' + str(W) + ', ' + str(H) + ']'               + '\n')
+            rules.write('                    AnimationInterval = 0.06'                              + '\n')
+            rules.write('                    AnimationStartTime = MinValue'                         + '\n')
+            rules.write('                    ClampAnimation = true'                                 + '\n')
+            rules.write('                }'                                                         + '\n')
+
+        rules.write('            ]'                                                                 + '\n')
+        rules.write('        }'                                                                     + '\n')
+        rules.write('        '                                                                      + '\n')
+        rules.write('        DestroyedEffects'                                                      + '\n')
+        rules.write('        {'                                                                     + '\n')
+        rules.write('            Type = DeathEffects'                                               + '\n')
+        rules.write('            MediaEffects = &/COMMON_EFFECTS/MedPartDestroyedDry'               + '\n')
+        rules.write('            Location = [' + str(W / float(2)) + ', ' + str(H / float(2)) + ']' + '\n')
+        rules.write('        }'                                                                     + '\n')
+        rules.write('        '                                                                      + '\n')
+        rules.write('        Blueprints'                                                            + '\n')
+        rules.write('        {'                                                                     + '\n')
+        rules.write('            Type = BlueprintSprite'                                            + '\n')
+        rules.write('            File = "' + nw_ + 'blueprints.png"'                                + '\n')
+        rules.write('            Size = [' + str(W) + ', ' + str(H) + ']'                                                     + '\n')
+        rules.write('        }'                                                                     + '\n')
+        
+        # if no_wall == true:
+        #     rules.write('        '                                                                      + '\n')
+        #     rules.write('        BlueprintWalls : <./Data/ships/terran/walls/blueprint_walls.rules>' + '\n')
+        #     rules.write('        {' + '\n')
+        #     rules.write('        	Location = [' + str(W / float(2)) + ', ' + str(H / float(2)) + ']' + '\n')
+        #     rules.write('        	BlendsWithCategories = [storage_nowall]' + '\n')
+        #     rules.write('        }' + '\n')
+        
+        
+        rules.write('    }'                                                                         + '\n')
+        rules.write('    '                                                                          + '\n')
+        rules.write('    Stats'                                                                     + '\n')
+        rules.write('    {'                                                                         + '\n')
+        rules.write('        StorageTiles = (&~/Part/Components/Storage/GridRect/2) * (&~/Part/Components/Storage/GridRect/3)'                                                                     + '\n')
+        rules.write('    }'                                                                         + '\n')
+        rules.write('}        '                                                                     + '\n')
+        
+        rules.close()
+
+    def close(self):
+        
+        PSP.current_storage     = None
+        PSP.storages[self.name] = None
+        
+        self.grid32 = None
+        self.grid64 = None
+        
+        self.image.close()
+        self.image = None
+
+class Impacts:
+    
+    def __init__(self, storage):
+        # type: (Storage) -> None
+    
+        self.impact_image = PSP.images['Impacts']
+        self.storage      = storage
+        
+        self.setImpactProba()
+        
+        self.layer_33 = self.impact_image.layers.getByName("33%")
+        self.layer_66 = self.impact_image.layers.getByName("66%")
+        
+        self.orientation = (false, false, 0)    # type: tuple[bool, bool, int]
+        
+        self.grid = self.impact_image.grid
+
+        self.select_coords = [(0, 0)] * 100
+        
+        coords     = self.select_coords
+        coords[0]  = ( 23,  22)
+        coords[1]  = ( 96,  38)
+        coords[2]  = (171,  27)
+        coords[3]  = (221,  30)
+        coords[4]  = (280,  28)
+        coords[5]  = (343,  36)
+        coords[6]  = (418,  25)
+        coords[7]  = (483,  30)
+        coords[8]  = (541,  16)
+        coords[9]  = (603,  44)
+        coords[10] = ( 25, 105)
+        coords[11] = ( 89,  83)
+        coords[12] = (153,  94)
+        coords[13] = (239,  80)
+        coords[14] = (280, 100)
+        coords[15] = (351, 109)
+        coords[16] = (427,  95)
+        coords[17] = (469,  82)
+        coords[18] = (551,  97)
+        coords[19] = (601,  87)
+        coords[20] = ( 23, 153)
+        coords[21] = ( 97, 180)
+        coords[22] = (173, 144)
+        coords[23] = (225, 161)
+        coords[24] = (275, 164)
+        coords[25] = (347, 168)
+        coords[26] = (428, 178)
+        coords[27] = (466, 161)
+        coords[28] = (531, 140)
+        coords[29] = (597, 173)
+        coords[30] = ( 39, 208)
+        coords[31] = ( 92, 219)
+        coords[32] = (142, 230)
+        coords[33] = (218, 223)
+        coords[34] = (292, 225)
+        coords[35] = (349, 215)
+        coords[36] = (404, 231)
+        coords[37] = (466, 208)
+        coords[38] = (547, 233)
+        coords[39] = (586, 230)
+        coords[40] = ( 17, 281)
+        coords[41] = ( 89, 281)
+        coords[42] = (156, 293)
+        coords[43] = (213, 290)
+        coords[44] = (292, 277)
+        coords[45] = (342, 288)
+        coords[46] = (403, 292)
+        coords[47] = (485, 282)
+        coords[48] = (534, 304)
+        coords[49] = (597, 279)
+        coords[50] = ( 45, 348)
+        coords[51] = ( 88, 347)
+        coords[52] = (157, 338)
+        coords[53] = (218, 358)
+        coords[54] = (297, 362)
+        coords[55] = (368, 348)
+        coords[56] = (403, 342)
+        coords[57] = (481, 348)
+        coords[58] = (553, 363)
+        coords[59] = (606, 348)
+        coords[60] = ( 24, 405)
+        coords[61] = ( 82, 425)
+        coords[62] = (161, 405)
+        coords[63] = (225, 417)
+        coords[64] = (301, 410)
+        coords[65] = (341, 417)
+        coords[66] = (411, 423)
+        coords[67] = (473, 408)
+        coords[68] = (543, 421)
+        coords[69] = (604, 412)
+        coords[70] = ( 23, 488)
+        coords[71] = ( 94, 485)
+        coords[72] = (152, 472)
+        coords[73] = (222, 490)
+        coords[74] = (279, 481)
+        coords[75] = (344, 481)
+        coords[76] = (414, 478)
+        coords[77] = (468, 472)
+        coords[78] = (545, 490)
+        coords[79] = (597, 463)
+        coords[80] = ( 31, 536)
+        coords[81] = ( 96, 543)
+        coords[82] = (153, 546)
+        coords[83] = (228, 534)
+        coords[84] = (296, 527)
+        coords[85] = (362, 546)
+        coords[86] = (413, 535)
+        coords[87] = (468, 532)
+        coords[88] = (539, 545)
+        coords[89] = (601, 538)
+        coords[90] = ( 25, 615)
+        coords[91] = ( 87, 601)
+        coords[92] = (146, 603)
+        coords[93] = (231, 601)
+        coords[94] = (285, 604)
+        coords[95] = (347, 611)
+        coords[96] = (422, 596)
+        coords[97] = (473, 595)
+        coords[98] = (538, 620)
+        coords[99] = (607, 603)
+
+        # Adjusting the coordinates to the cell size.
+        size = self.grid.cell_size_w
+        for index in range(len(coords)):
+            coord = coords[index]
+            coords[index] = (coord[0] % size, coord[1] % size)
+
+        self.impacts = {
+            '33%': [ ],  # type: list[Impact]
+            '66%': [ ]   # type: list[Impact]
+        } # type: dict[str, list[Impact]]
+
+    def setImpactProba(self, first = 2, last = 1):
+        # type: (int, int) -> None
+        
+        impact_proba = [ ] # type: list[int]
+        
+        for mul in range(first):
+            for index in range(80):             # first 80 impacts are smaller.
+                impact_proba.append(index)
+        
+        for mul in range(last):
+            for index in range(80, 100):        # last 20 impacts are bigger.
+                impact_proba.append(index)
+
+        self.proba = impact_proba 
+    
+    def setOrientation(self, orientation):
+        # type: (tuple[bool, bool, int]) -> None
+        
+        r_mirror_x, r_mirror_y, r_rotation = orientation        # r -> requested
+        c_mirror_x, c_mirror_y, c_rotation = self.orientation   # c -> current
+        
+        if r_mirror_y != c_mirror_y:
+            if c_rotation in [90, 270]:
+                self.impact_image.mirrorVertically()
+            else:
+                self.impact_image.mirrorHorizontally()
+
+        if r_mirror_x != c_mirror_x:
+            if c_rotation in [90, 270]:
+                self.impact_image.mirrorHorizontally()
+            else:
+                self.impact_image.mirrorVertically()
+            
+        if r_rotation != c_rotation:
+            angle = r_rotation - c_rotation
+            self.impact_image.rotate(angle)
+        
+        self.orientation = (r_mirror_x, r_mirror_y, r_rotation)            
+                
+    def getRotatedCoord(self, coord, expected_orientation, current_orientation = (false, false, 0)):
+        # type: (tuple[int, int, int, int], tuple[bool, bool, int], tuple[bool, bool, int]) -> tuple[int, int]
+
+        # Unpack the arguments
+        pos_x, pos_y, max_x, max_y         = coord
+        c_mirror_x, c_mirror_y, c_rotation = current_orientation
+        e_mirror_x, e_mirror_y, e_rotation = expected_orientation
+
+        # Adjust for mirror in Y direction
+        if c_mirror_y != e_mirror_y:
+            if c_rotation in [90, 270]:
+                pos_x = (max_x - 1) - pos_x
+            else:
+                pos_y = (max_y - 1) - pos_y
+
+        # Adjust for mirror in X direction
+        if c_mirror_x != e_mirror_x:
+            if c_rotation in [90, 270]:
+                pos_y = (max_y - 1) - pos_y
+            else:
+                pos_x = (max_x - 1) - pos_x
+
+        # Adjust for rotation
+        rotation_diff = (e_rotation - c_rotation) % 360
+        if rotation_diff == 90:
+            pos_x, pos_y = (max_y - 1) - pos_y, pos_x
+        elif rotation_diff == 180:
+            pos_x, pos_y = (max_x - 1) - pos_x, (max_y - 1) - pos_y
+        elif rotation_diff == 270:
+            pos_x, pos_y = pos_y, (max_x - 1) - pos_x
+
+        return (pos_x, pos_y)
+    
+    def getNewRepartition(self, count):
+        
+        result = [ ]
+        
+        for index in range(count):
+            result.append(index)
+            
+        shuffle(result)
+        
+        return result
+    
+    def generateImpacts(self):
+        # type: () -> None
+        
+        storage_grid    = self.storage.image.grid
+        grid_cell_count = storage_grid.cols * storage_grid.rows
+        
+        impact_count_small_33 = grid_cell_count * 1.25 # 125%
+        impact_count_big_33   = impact_count_small_33 * 0.30 # 30%
+
+        impact_count_small_66 = impact_count_small_33 * 3.75 # 250%
+        impact_count_big_66   = impact_count_big_33 * 2.75 # 250%
+        
+        impact_transfer       = impact_count_small_66 * 0 # 25%
+        
+        impact_count_small_66 -= impact_transfer
+        impact_count_big_66   += impact_transfer
+        
+        impact_count_small_33 = floor(impact_count_small_33)
+        impact_count_big_33   = floor(impact_count_big_33)
+        impact_count_small_66 = floor(impact_count_small_66)
+        impact_count_big_66   = floor(impact_count_big_66)
+        
+        impacts_33 = self.impacts['33%']
+        impacts_66 = self.impacts['66%']
+        
+        while impact_count_small_33 > 0:
+            impacts_33.append(Impact(self, self.storage, 0))
+            impact_count_small_33 -= 1
+        
+        while impact_count_big_33 > 0:
+            impacts_33.append(Impact(self, self.storage, 1))
+            impact_count_big_33 -= 1
+        
+        repartition = [ ]
+        for impact_33 in impacts_33:
+            if len(repartition) == 0:
+                repartition = self.getNewRepartition(grid_cell_count)
+
+            if impact_33.hasSource() == false:
+                impact_33.generateSource()
+            
+            if impact_33.hasDestination() == false:
+                impact_33.setDestination(repartition.pop(0))
+            
+            impact_66 = impact_33.getCopy()
+            if impact_66.type == 0:
+                if impact_count_small_66 > 0:
+                    impact_count_small_66 -= 1
+                else:
+                    impact_66.type = 1 
+                    
+            if impact_66.type == 1:
+                if impact_count_big_66 > 0:
+                    impact_count_big_66 -= 1
+                else:
+                    continue
+            
+            impacts_66.append(impact_66)
+        
+        while impact_count_small_66 > 0:
+            impacts_66.append(Impact(self, self.storage, 0))
+            impact_count_small_66 -= 1
+        
+        while impact_count_big_66 > 0:
+            impacts_66.append(Impact(self, self.storage, 1))
+            impact_count_big_66 -= 1
+
+        for impact_66 in impacts_66:
+            if len(repartition) == 0:
+                repartition = self.getNewRepartition(grid_cell_count)
+        
+            if impact_66.hasSource() == false:
+                impact_66.generateSource()
+        
+            if impact_66.hasDestination() == false:
+                impact_66.setDestination(repartition.pop(0))
+            
+    def selectAllImpacts(self, impacts):
+        # type: (list[Impact]) -> None
+        
+        selection = self.storage.image.selection
+        
+        for impact in impacts:
+            x, y = impact.getSelectCoord()
+            # print(x, y)
+            selection.SelectAreaW(x, y, true)
+            # self.storage.image.layers.getCurrent().paintDot(x, y, (0, 0, 0))
+                    
+    def renderImpacts(self, layers):
+        # type: (tuple[Layer, Layer, Layer, Layer]) -> None
+        
+        impacts_33 = self.impacts['33%']
+        impacts_66 = self.impacts['66%']
+        
+        img_33  = layers[0]
+        mask_33 = layers[1]
+        img_66  = layers[2]
+        mask_66 = layers[3]
+                
+        layer_33 = self.layer_33
+        layer_66 = self.layer_66
+    
+        impact_position = [ ] # type: list[list[tuple[bool, bool, int]|tuple[int, int, int, int]|tuple[int, int]|Impact|Layer]]
+        sorter_impact_position = [ [{ }, { }], [{ }, { }] ] # type: list[list[dict[tuple[bool, bool, int], list[tuple[bool, bool, int]|tuple[int, int, int, int]|tuple[int, int]|Impact|Layer]]]]
+        
+        for level, impacts, dst_img in [(0, impacts_33, img_33), (1, impacts_66, img_66)]:
+            for impact in impacts:
+                key = impact.orientation
+                
+                src_layer = [layer_33, layer_66][impact.type]
+                
+                src_area = self.grid.getCellArea(impact.src_cell_x, impact.src_cell_y)
+                dst_pos_x, dst_pos_y  = self.storage.grid64.getPosOffset(impact.dst_cell_x, impact.dst_cell_y)        
+                offset_x, offset_y    = impact.getCellOffset()
+
+                dst_pos = (dst_pos_x + offset_x, dst_pos_y + offset_y)
+                
+                sorter_dict = sorter_impact_position[level][impact.type]
+                if key not in sorter_dict:
+                    sorter_dict[key] = [ ]
+                    
+                sorter_dict[key].append([
+                    impact.orientation,
+                    src_area,
+                    dst_pos,
+                    impact,
+                    src_layer,
+                    dst_img
+                ])
+            
+        for level in sorter_impact_position:
+            for type in level:
+                for orientation, impacts in type.items():
+                    for impact in impacts:
+                        impact_position.append(impact)
+
+        for impact in impact_position:
+            orientation = impact[0] # type: tuple[bool, bool, int]
+            src_area    = impact[1] # type: tuple[int, int, int, int]
+            dst_pos     = impact[2] # type: tuple[int, int]
+            src_layer   = impact[4] # type: Layer
+            dst_img     = impact[5] # type: Layer
+        
+            if dst_img.isCurrent() == false:
+                if dst_img is img_33:
+                    img_66.hide()
+                else:
+                    img_33.hide()
+                    
+                dst_img.activate()          
+                dst_img.show()
+            
+            src_layer.activate()
+            
+            self.setOrientation(orientation)
+            src_layer.selection.selectArea(*src_area)
+            src_layer.selection.copy()
+            
+            dst_img.pasteClipboard(*dst_pos)
+            
+        # Release the image in the correct orientation for later.
+        self.setOrientation((false, false, 0))
+        
+        img_33.hide()
+        img_66.hide()
+                
+        selection = self.storage.image.selection
+        for type, layer, mask, impacts in [(33, img_33, mask_33, impacts_33), (66, img_66, mask_66, impacts_66)]:
+            layer.activate()
+            layer.show()
+            
+            layer.replaceAllColor([(0, 0, 255), (255, 0, 255)], (255, 0, 0))
+            
+            selection_name = layer.name # + ':' + str(type)
+            
+            if type == 33:
+                self.selection_name_33 = selection_name
+            else:
+                self.selection_name_66 = selection_name
+            
+            self.selectAllImpacts(impacts)
+            selection.save(selection_name + ':tmp')
+
+            selection.expand(4)
+            layer.paintAll((0, 0, 0))
+            
+            selection.invert()
+            selection.delete()
+            
+            self.storage.image.deleteOffScreenData()
+            selection.load(selection_name + ':tmp')
+            selection.invert()
+            layer.blurGaussian(2.5)
+            
+            selection.invert()
+            selection.delete()
+            selection.expand(1)
+            layer.blurGaussian(1.5)
+            layer.hide()
+
+            mask.activate()
+            selection.load(selection_name + ':tmp')
+            selection.expand(1)
+            mask.paintAll((0, 0, 0))
+            selection.save(selection_name)
+            mask.hide()
+            
+            selection.unselect()
+            
+        self.storage.image.deleteOffScreenData()
+                
+class Impact:
+    
+    def __init__(self, impacts, storage, type = 0):
+        # type: (Impacts, Storage, int) -> None
+    
+        self.impacts   = impacts
+        self.storage   = storage
+        self.grid      = impacts.grid
+        
+        self.type = type    # 0 for 33%, 1 for 66%
+        
+        # Temporary values
+        self.index     = -1
+        self.dst_index = -1
+        self.offset_x  = None
+        self.offset_y  = None
+
+        self.orientation  = None
+        self.src_cell_x   = None
+        self.src_cell_y   = None
+        self.dst_cell_x   = None
+        self.dst_cell_y   = None
+        self.select_pos_x = None
+        self.select_pos_y = None
+        self.offset_x     = None
+        self.offset_y     = None
+
+    def getCopy(self):
+        
+        impact = Impact(self.impacts, self.storage, self.type)
+        
+        impact.index     = self.index    
+        impact.dst_index = self.dst_index
+        impact.offset_x  = self.offset_x 
+        impact.offset_y  = self.offset_y 
+        
+        impact.orientation   = self.orientation 
+        impact.src_cell_x    = self.src_cell_x
+        impact.src_cell_y    = self.src_cell_y
+        impact.dst_cell_x    = self.dst_cell_x
+        impact.dst_cell_y    = self.dst_cell_y
+        impact.select_pos_x  = self.select_pos_x
+        impact.select_pos_y  = self.select_pos_y
+        impact.offset_x      = self.offset_x
+        impact.offset_y      = self.offset_y
+
+        return impact
+
+    def hasSource(self):
+        # type: () -> None
+        
+        return (self.index != -1)
+        
+    def hasDestination(self):
+        # type: () -> None
+        
+        return (self.dst_index != -1)
+        
+    def generateSource(self):
+        
+        # Choose an impact and an orientation.
+        self.index       = random.choice(self.impacts.proba)
+        self.orientation = self.getRandomizedOrientation()
+
+        # Calculate the selection position
+        cell_size = self.grid.cell_size_w
+        select_pos_x, select_pos_y = self.impacts.select_coords[self.index]
+        select_pos_x, select_pos_y = self.impacts.getRotatedCoord((select_pos_x, select_pos_y, cell_size, cell_size), self.orientation)
+        
+        self.select_pos_x = select_pos_x
+        self.select_pos_y = select_pos_y
+            
+        # Calculate the source cell in the Impacts image.
+        src_cell_x, src_cell_y = self.grid.getPosFromIndex(self.index)
+        src_cell_x, src_cell_y = self.impacts.getRotatedCoord((src_cell_x, src_cell_y, self.grid.cols, self.grid.rows), self.orientation)
+        
+        self.src_cell_x = src_cell_x
+        self.src_cell_y = src_cell_y
+
+        if self.hasDestination() == true:
+            self.generateCellOffset()
+
+    def generateCellOffset(self):
+        
+        if self.hasSource() == false:
+            return
+        
+        # Do nothing if no destination yet.
+        if type(self.dst_index) != int:
+            return
+        
+        grid = self.storage.grid64
+        w = grid.cols - 1
+        h = grid.rows - 1
+        x = self.dst_cell_x
+        y = self.dst_cell_y
+
+        max_cell_offset = floor(grid.cell_size_w)
+        self.offset_x   = random.randrange(0, max_cell_offset, 1) - floor(max_cell_offset / 2)
+        self.offset_y   = random.randrange(0, max_cell_offset, 1) - floor(max_cell_offset / 2)
+        
+        # Avoid useless check if the destination is not on a side of the storage.
+        if (x > 0 and x < w) and (y > 0 and y < h):
+            return
+                
+        # Ensure the selection position is not oustide the image.
+        
+        dst_pos_x, dst_pos_y = grid.getPos(self.dst_cell_x, self.dst_cell_y)
+        sel_pos_x, sel_pos_y = self.select_pos_x, self.select_pos_y
+            
+        W = self.storage.width
+        H = self.storage.height
+        
+        pos_x = dst_pos_x + sel_pos_x    
+        pos_y = dst_pos_y + sel_pos_y
+             
+        wtry = 0
+        while wtry < 1000:
+            wtry += 1
+        
+            offset_pos_x = pos_x + self.offset_x
+            offset_pos_y = pos_y + self.offset_y
+    
+            if  (offset_pos_x >= 0 and offset_pos_x < W) and \
+                (offset_pos_y >= 0 and offset_pos_y < H):
+                break
+
+            self.offset_x = random.randrange(0, max_cell_offset, 1) - floor(max_cell_offset / 2)
+            self.offset_y = random.randrange(0, max_cell_offset, 1) - floor(max_cell_offset / 2)
+        
+    def setDestination(self, index):
+        # type: (int) -> None
+        
+        self.dst_index = index
+        
+        grid = self.storage.grid64
+        
+        dst_cell_x, dst_cell_y = grid.getPosFromIndex(self.dst_index)
+        self.dst_cell_x = dst_cell_x
+        self.dst_cell_y = dst_cell_y
+        
+        self.generateCellOffset()
+                
+    def getRandomizedOrientation(self):
+        # type: () -> tuple[bool, bool, int]
+        
+        mirror_x = random.choice([true, false])
+        mirror_y = random.choice([true, false])
+        rotation = random.randrange(0, 4, 1) * 90
+        
+        return (mirror_x, mirror_y, rotation)
+    
+    def getSelectCoord(self):
+        # type: () -> tuple[int, int]
+        
+        pos_x, pos_y = self.select_pos_x, self.select_pos_y
+        
+        dst_pos_x, dst_pos_y  = self.storage.grid64.getPos(self.dst_cell_x, self.dst_cell_y)        
+        
+        pos_x += self.offset_x + dst_pos_x
+        pos_y += self.offset_y + dst_pos_y
+        
+        return (pos_x, pos_y)
+
+    def getCellOffset(self):
+        # type: () -> tuple[int, int]
+        
+        return (self.offset_x, self.offset_y)
+        
+    # def render(self):
+        
+class Layers:
+    
+    def __init__(self, owner_image):            # type: (Image) -> None
+    
+        self.layers = [ ]                       # type: list[Layer]
+        self.is_group = true                    # type: bool
+        self.is_root  = true                    # type: bool
+        
+        self.is_visible = true                  # type: bool
+        
+        self.owner_image = owner_image
+        
+        self._reinit()        
+        
+    def _reinit(self):
+        
+        psp_image = self.getPSPImage()
+        layers    = self.layers
+        
+        while len(layers) > 0:
+            layers[0]._remove()
+        
+        # Go to the first layer.
+        PSP.callAPI('SelectLayer', {'Path': (99, -99, [], false)}, psp_image)
+        
+        found = true
+        while found == true:
+            props = PSP.callAPI('ReturnLayerProperties', { }, psp_image)
+                
+            # print(props['Path'])
+
+            parent  = self
+            indexes = props['Path'][2]
+
+            for i in range(len(indexes)):
+                indexes[i] -= 1
+                
+            indexes.insert(0, props['Path'][1])
+                        
+            # print(props['General']['Name'], len(indexes), indexes)
+            
+            # We get item in the right order, so it's *always* the last one that need to be added.
+            for i in range(len(indexes) - 1):
+                parent = parent.layers[indexes[i]]
+                
+            properties = {
+                'Name':      props['General']['Name'],
+                'Type':      props['LayerType'],
+                'IsVisible': props['General']['IsVisible']
+            }
+                
+            new_layer = Layer(properties, self.owner_image)
+            new_layer._moveToParent(parent)
+                    
+            # print(props['General']['Name'], props['Path'])
+        
+            found = PSP.callAPI('SelectNextLayer', { }, psp_image)
+            
+        self.goToOrigin()
+
+    def __getitem__(self, index): # type: (int) -> Layer
+        
+        return self.layers[index]
+                            
+    def getPSPImage(self):
+        
+        return self.owner_image.psp_image
+            
+    def goToOrigin(self):
+        
+        settings = {
+            'Path': (99, -99, [], false)
+        }
+        
+        PSP.callAPI('SelectLayer', settings, self.getPSPImage())
+        
+        self.current = self.layers[0]
+        
+    def getCurrent(self):
+        
+        return self.current
+    
+    def getByName(self, name, layer = None):
+        # type: (str, Layer) -> Layer
+        
+        if layer == None:
+            layer = self 
+        
+        if layer.is_group == false:
+            return None
+        
+        layers = layer.layers
+        
+        for index in range(len(layers)):
+            child = layers[index]
+            if child.name == name:
+                return child
+            elif child.is_group == true:
+                result = self.getByName(name, child)
+                if result != None:
+                    return result 
+            
+        return None
+        
+    def hideAll(self):
+        
+        for index in range(len(self.layers)):
+            layer = self.layers[index]
+            layer.hide(true)
+
+    def showAll(self):
+        
+        for index in range(len(self.layers)):
+            layer = self.layers[index]
+            layer.show(true)
+                
+class Layer:
+    
+    def __init__(self, properties, owner_image):
+        # type: (dict[str, str|int|bool], Image) -> None
+    
+        self.parent   = None    # type: Layer
+
+        self.is_group = false
+        self.is_root  = false
+    
+        self.owner_image = owner_image
+    
+        self.name       = properties['Name']        # type: str
+        self.type       = properties['Type']        # type: int
+        self.is_visible = properties['IsVisible']   # type: bool
+    
+        if self.type == types['Group']:
+            self.layers   = [ ]       # type: list[Layer]
+            self.is_group = true
+            
+        self.selection = self.owner_image.selection
+    
+    def _remove(self):
+        
+        if self.is_group == true:
+            layers = self.layers
+            
+            while len(layers) > 0:
+                layers[0]._remove()
+
+        layers = self.parent.layers
+                
+        for index in range(len(layers)):
+            if layers[index] is self:
+                layers.pop(index)
+                break
+                
+        self.parent      = None
+        self.owner_image = None
+        self.selection   = None
+        self.layers      = None
+        
+    def _moveToParent(self, parent, new_index = -1):
+        # type: (Layer, int) -> None
+        
+        if self.parent != None:
+            index = self.getIndex()
+            self.parent.layers.pop(index)
+            
+        if new_index == -1:
+            parent.layers.append(self)
+        else:
+            parent.layers.insert(new_index + 1, self)
+            
+        self.parent = parent        
+        
+    def getProperties(self, properties, layer_type):
+        # type: (str|dict[str, str|bool|int|dict], int) -> dict[str, str|bool|int|dict]
+        
+        if type(properties) == str:
+            properties = { 
+                'Name': properties
+            }
+
+        if 'IsVisible' not in properties:
+            if self.parent != None:
+                properties['IsVisible'] = self.parent.is_visible
+            else:
+                properties['IsVisible'] = true
+            
+        properties['Type'] = layer_type
+        
+        return properties            
+    
+    def getPathFromCurrentLayer(self):
+        
+        src_path = self.owner_image.layers.current.getPath()
+        dst_path = self.getPath()
+        
+        # Remove common parents (except the last one when the last one is the last value of the list)
+        while min(len(src_path), len(dst_path)) - 1 > 0:
+            if src_path[0] != dst_path[0]:
+                break
+            
+            src_path.pop(0)
+            dst_path.pop(0)
+        
+        go_up = len(src_path) - 1
+        move  = dst_path.pop(0) - src_path.pop(0)
+                 
+        return (go_up, move, dst_path, false)
+    
+    def addMask(self, properties):
+        
+        properties = self.getProperties(properties, types['Mask'])
+                        
+        settings = {
+            'General': {
+                'Name': properties['Name'], 
+                'IsVisible': properties['IsVisible'] 
+            }
+        }
+        
+        layer     = self
+        image     = self.owner_image
+        layers    = layer.parent.layers
+        new_layer = Layer(properties, image)
+        
+        layer.activate()
+        new_layer._moveToParent(layer.parent, layer.getIndex())
+        
+        if 'Content' in properties and properties['Content'] == 'Hide':
+            PSP.callAPI('NewMaskLayerHide', settings, layer.getPSPImage())
+        else:
+            PSP.callAPI('NewMaskLayerShow', settings, layer.getPSPImage())
+        image.layers.current = new_layer
+        
+        return new_layer
+
+    def addSibling(self, properties):
+        
+        properties = self.getProperties(properties, types['Raster'])
+                        
+        settings = {
+            'General': {
+                'Name': properties['Name'], 
+                'IsVisible': properties['IsVisible'] 
+            },
+        }
+        
+        layer     = self
+        image     = self.owner_image
+        layers    = layer.parent.layers
+        new_layer = Layer(properties, image)
+        
+        layer.activate()
+        new_layer._moveToParent(layer.parent, layer.getIndex())
+        
+        PSP.callAPI('NewRasterLayer', settings, layer.getPSPImage())
+        image.layers.current = new_layer
+        
+        return new_layer
+        
+    def addGroup(self, properties):
+        
+        properties = self.getProperties(properties, types['Group'])
+                        
+        settings = {
+            'General': {
+                'Name': properties['Name'], 
+                'IsVisible': properties['IsVisible']
+            }
+        }
+        
+        layer     = self
+        layers    = layer.parent.layers
+        image     = layer.owner_image
+        new_layer = Layer(properties, image)
+        
+        layer.activate()
+                
+        new_layer._moveToParent(layer.parent, layer.getIndex())
+        layer._moveToParent(new_layer)
+                
+        PSP.callAPI('NewLayerGroup', settings, layer.getPSPImage())
+        image.layers.current = new_layer
+        
+        return new_layer
+    
+    def addLayers(self, layers):
+        
+        #    [ 'name1', {'name2', [ 'name3' ] } ]
+
+        for i1 in range(len(layers)):
+            item = layers[i1]
+            
+            if type(item) == str:
+                layers[i1] = { 'Name': item }
+            else:
+                if 'Children' in item:
+                    for i2 in range(len(item['Children'])):
+                        child = item['Children'][i2]
+                        
+                        if type(child) == str:
+                            item['Children'][i2] = { 'Name': child }
+
+        for i1 in range(len(layers)):
+            item = layers[i1]
+            
+            if item['Name'][:1] == ':':
+                item['Name'] = item['Name'][1:]
+                item['Type'] = types['Mask']
+                if item['Name'][:1] == '!':
+                    item['Name'] = item['Name'][1:]
+                    item['Content'] = 'Hide'
+            else:
+                if 'Children' in item:
+                    for i2 in range(len(item['Children'])):
+                        child = item['Children'][i2]
+                        
+                        if child['Name'][:1] == ':':
+                            child['Name'] = child['Name'][1:]
+                            child['Type'] = types['Mask']
+                            if child['Name'][:1] == '!':
+                                child['Name'] = child['Name'][1:]
+                                child['Content'] = 'Hide'
+        
+        last_sibling = self
+        pending_mask = []
+        
+        for properties in layers:
+            
+            if 'Children' in properties:
+            
+                children = properties['Children']
+            
+                child = children.pop(0)
+                
+                if 'Children' in child:
+                    last_child = last_sibling.addLayers([child,])
+                else:
+                    if 'Type' in child and child['Type'] == types['Mask']:
+                        pending_mask.insert(0, [last_sibling, child])
+                        raise NameError("The first child of a group can't be a mask layer !")
+                    else:
+                        last_child = last_sibling.addSibling(child)
+                    
+                last_sibling = last_child.addGroup(properties)
+                
+                if len(children) > 0:    
+                    last_child.addLayers(children)
+            
+            else:
+                if 'Type' in properties and properties['Type'] == types['Mask']:
+                    pending_mask.insert(0, [last_sibling, properties])
+                else:
+                    last_sibling = last_sibling.addSibling(properties)
+        
+        while len(pending_mask) > 0:
+            mask = pending_mask.pop(0)
+            
+            last_sibling = mask[0] # type: Layer
+            properties = mask[1]
+            
+            last_sibling.addMask(properties)
+        
+        return last_sibling    
+
+    def moveToGroupBelow(self):
+        
+        self.activate()
+        
+        self._moveToParent(self.parent.layers[self.getIndex() - 1])
+        
+        PSP.callAPI('LayerArrangeMoveIn', { }, self.getPSPImage())
+
+    def mergeGroup(self):
+        
+        if self.is_group == false:
+            return
+        
+        self.activate()
+        self.show(true)
+        self.showChildren()
+        
+        while len(self.layers) > 0:
+            self.layers[0]._remove()
+        
+        self.is_group = false
+        self.layers   = None
+        self.type     = types['Raster']
+        
+        PSP.callAPI('LayerMergeGroup', { }, self.getPSPImage())    
+            
+    def delete(self):
+        
+        if self.owner_image.selection.exists(true) == true:
+            self.owner_image.selection.unselect()
+            
+        settings = {
+            'Path': self.getPathFromCurrentLayer()
+        }
+                        
+        PSP.callAPI('DeleteLayer', settings, self.getPSPImage())
+                    
+    def getPSPImage(self):
+        
+        return self.owner_image.psp_image
+
+    def activate(self, set_visible = false):
+        # type: (bool) -> None
+        
+        if self.owner_image.selection.exists(true) == true:
+            self.owner_image.selection.unselect()
+                    
+        if self.isCurrent():
+            if set_visible == true and self.isVisible(true) == false:
+                self.show(true)
+                
+            return
+                    
+        settings = {
+            'Path': self.getPathFromCurrentLayer()
+        }
+        
+        PSP.callAPI('SelectLayer', settings, self.getPSPImage())
+        self.owner_image.layers.current = self
+
+        if set_visible == true and self.isVisible(true) == false:
+            self.show(true)
+        
+    def show(self, strict = false):
+        
+        if strict == false:
+            if self.is_visible == false:
+                if self.owner_image.selection.exists(true) == true:
+                    self.owner_image.selection.unselect()
+                    
+                settings = {
+                    'Command': App.Constants.ShowCommands.Show,
+                    'Path':    self.getPathFromCurrentLayer()
+                }
+                                
+                PSP.callAPI('LayerSetVisibility', settings, self.getPSPImage())
+                self.is_visible = true
+                
+            return
+        
+        layer = self
+        
+        layer.show()
+        
+        layer = layer.parent
+        
+        if layer.is_root == false:
+            layer.show(true)
+    
+    def showChildren(self):
+        
+        if self.is_group == false:
+            return
+        
+        for layer in self.layers:
+            layer.show()
+            if layer.is_group == true:
+                layer.showChildren()
+            
+    def hide(self, strict = false):
+        
+        if strict == false:
+            if self.is_visible == true:
+                if self.owner_image.selection.exists(true) == true:
+                    self.owner_image.selection.unselect()
+                    
+                settings = {
+                    'Command': App.Constants.ShowCommands.Hide,
+                    'Path':    self.getPathFromCurrentLayer()
+                }
+                                
+                PSP.callAPI('LayerSetVisibility', settings, self.getPSPImage())
+                self.is_visible = false
+                
+            return
+        
+        layer = self
+        
+        layer.hide()
+        
+        if layer.is_group == true:
+            layers = layer.layers
+            
+            for index in range(len(layers)):
+                layer = layers[index]
+                layer.hide(true)
+    
+    def hideChildren(self):
+
+        if self.is_group == false:
+            return
+        
+        for layer in self.layers:
+            layer.hide()
+            if layer.is_group == true:
+                layer.hideChildren()        
+    
+    def pasteClipboard(self, offset_x, offset_y):
+
+        self.activate()
+        
+        settings = {
+            'Offset': (offset_x, offset_y)
+        }
+        
+        PSP.callAPI('PasteAsNewSelection', settings, self.getPSPImage())
+        self.owner_image.selection.has_selection = true
+        self.owner_image.selection.is_float      = true
+    
+    def pipette(self, pos_x, pos_y):
+        # type: (int, int) -> None
+        
+        self.activate()
+        
+        settings = {
+            'Point': (pos_x, pos_y),
+            'ActiveLayerOnly': true,             
+        }
+        
+        PSP.callAPI('Eyedropper', settings, self.getPSPImage())
+    
+    def replaceColor(self, pos_x, pos_y, src_color, dst_color, size = 0):
+        
+        self.activate()
+        
+        settings = {
+            'ForegroundMaterial': {
+                'Color': src_color
+            }, 
+            'BackgroundMaterial': {
+                'Color': dst_color
+            }, 
+            'Stroke': [
+                (App.Constants.PathEntryInterpretation.Absolute, (pos_x, pos_y), 0)
+            ], 
+        }
+        
+        if size != 0:
+            settings['BrushTip'] = {
+                'Size': size
+            }
+
+        PSP.callAPI('ColorReplacer', settings, self.getPSPImage())
+    
+    def replaceAllColor(self, src_color, dst_color):
+        
+        self.activate()
+
+        if type(src_color) != list:        
+            src_color = [src_color]
+            
+        width  = self.owner_image.width
+        height = self.owner_image.height
+            
+        for color in src_color:
+            if max(width, height) > 500:
+                for y in range(floor(height / 500) + 1):
+                    for x in range(floor(width / 500) + 1):
+                        self.replaceColor((x * 500) + 250, (y * 500) + 250, color, dst_color, 500)
+            else:
+                self.replaceColor(width / 2, height / 2, color, dst_color, 500)
+    
+    def paintDot(self, pos_x, pos_y, color):
+        
+        self.activate()
+        
+        settings = {
+            'ForegroundMaterial': {
+                'Color': color
+            },
+            'Stroke': [
+                (App.Constants.PathEntryInterpretation.Absolute, (pos_x, pos_y), 0)
+            ]
+        }
+        
+        PSP.callAPI('PaintBrush', settings, self.getPSPImage())
+
+    def paintAll(self, color):
+
+        self.activate()
+
+        width  = self.owner_image.width
+        height = self.owner_image.height
+
+        settings = {
+            'ForegroundMaterial': {
+                'Color': color
+            },
+            'BrushTip': {
+                'Shape': App.Constants.BrushShape.Rectangular, 
+                'Size': 500
+            }
+        }
+            
+        for y in range(floor(height / 500) + 1):
+            for x in range(floor(width / 500) + 1):
+                settings['Stroke'] = [(App.Constants.PathEntryInterpretation.Absolute, ((x * 500) + 250, (y * 500) + 250), 0)]
+                PSP.callAPI('PaintBrush', settings, self.getPSPImage())
+    
+    def fill(self, pos_x, pos_y, color):
+        # type: (int, int, tuple[int, int, int]) -> None
+        
+        self.activate()
+        
+        settings = {
+            'Material': {
+                'Color': color
+            },
+            'Point': (pos_x, pos_y)
+        }
+        
+        PSP.callAPI('Fill', settings, self.getPSPImage())
+    
+    def blurGaussian(self, size):
+        
+        self.activate()
+
+        settings = {
+            'Radius': size,    
+        }        
+        
+        PSP.callAPI('GaussianBlur', settings, self.getPSPImage())
+    
+    def mirrorHorizontally(self):
+    
+        self.activate()
+        
+        PSP.callAPI('Flip', { }, self.getPSPImage())
+    
+    def mirrorVertically(self):
+
+        self.activate()
+            
+        PSP.callAPI('Mirror', { }, self.getPSPImage())
+            
+    def rotate(self, angle):
+        
+        self.activate()
+        
+        settings = { 
+            'Direction': false
+        }            
+        
+        if angle < 0:
+            angle = abs(angle)
+            settings['Direction'] = true
+        
+        settings['RotAngleDegrees'] = angle, 
+        
+        PSP.callAPI('Rotate', settings, self.getPSPImage())
+            
+    def move(self, move_x, move_y):
+        # type: (int, int) -> None
+        
+        self.activate()
+        
+        settings = {
+            'Offset': (move_x, move_y),
+            'SelectPoint': None
+        }
+        
+        PSP.callAPI('Mover', settings, self.getPSPImage())
+            
+    def isCurrent(self):
+                
+        return self is self.owner_image.layers.getCurrent()
+    
+    def isVisible(self, strict = false):
+        
+        if strict == false:
+            return self.is_visible
+        
+        layer = self
+        while layer.is_root == false:
+            if layer.is_visible == false:
+                return false
+            
+            layer = layer.parent
+                    
+        return true
+    
+    def getPath(self):
+        
+        path = [ ]
+        
+        current = self
+
+        while current != None:
+            
+            if current.is_root == true:
+                current = None
+                break
+            
+            parent = current.parent
+            children = parent.layers
+            
+            for index in range(len(children)):
+                if current is children[index]:
+                    path.insert(0, index + 1)
+                    break
+                
+            current = parent
+            
+        return path
+
+    def getByName(self, name, layer = None):
+        
+        if layer == None:
+            layer = self
+        
+        if layer.is_group == false:
+            return None
+        
+        layers = layer.layers
+        
+        for index in range(len(layers)):
+            child = layers[index]
+            if child.name == name:
+                return child
+            elif child.is_group == true:
+                result = self.getByName(name, child)
+                if result != None:
+                    return result
+            
+        return None
+
+    def getIndex(self):
+
+        layers = self.parent.layers
+                
+        for index in range(len(layers)):
+            if layers[index] is self:
+                return index
+        
+        return None
+        
+    def setOpacity(self, opacity):
+        
+        self.activate()
+        
+        settings = {
+            'General': { 
+                'Opacity': opacity
+            },             
+        }
+        
+        PSP.callAPI('LayerProperties', settings, self.getPSPImage())
+
+    def rename(self, name):
+        
+        self.activate()
+        
+        settings = {
+            'General': { 
+                'Name': name
+            },             
+        }
+        
+        PSP.callAPI('LayerProperties', settings, self.getPSPImage())
+
+def iif(check, true_value, false_value):
+    if check == true:
+        return true_value
+    else:
+        return false_value
+
+def getPercent(value, percent):
+    return (value * percent) / 100
+
+
+# ==============================================================================
+# ==  Other Functions  =========================================================
+# ==============================================================================
+
+# Used only by PSP
+def ScriptProperties():
+    return {
+        'Author': u'FooPhoenix',
+        'Copyright': u'2024 FooPhoenix, MIT License',
+        'Description': u'This script will generate all storage size.',
+        'Host': u'Paint Shop Pro',
+        'Host Version': u'8.10'
+        }

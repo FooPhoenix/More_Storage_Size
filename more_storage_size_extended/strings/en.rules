@@ -1,0 +1,68 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+Parts
+{
+    FooStorage_5x1       = "Storage Bay"
+    FooStorage_5x1Icon   = &FooStorage_5x1
+    FooStorage_5x1Desc   = "Stores 5 stacks of resources of any types."
+    FooStorage_5x1DescNW = "Stores 5 stacks of resources of any types. (Without wall)"
+
+    FooStorage_6x1       = "Storage Bay"
+    FooStorage_6x1Icon   = &FooStorage_6x1
+    FooStorage_6x1Desc   = "Stores 6 stacks of resources of any types."
+    FooStorage_6x1DescNW = "Stores 6 stacks of resources of any types. (Without wall)"
+
+    FooStorage_5x2       = "Storage Bay"
+    FooStorage_5x2Icon   = &FooStorage_5x2
+    FooStorage_5x2Desc   = "Stores 10 stacks of resources of any types."
+    FooStorage_5x2DescNW = "Stores 10 stacks of resources of any types. (Without wall)"
+
+    FooStorage_6x2       = "Storage Bay"
+    FooStorage_6x2Icon   = &FooStorage_6x2
+    FooStorage_6x2Desc   = "Stores 12 stacks of resources of any types."
+    FooStorage_6x2DescNW = "Stores 12 stacks of resources of any types. (Without wall)"
+
+    FooStorage_5x3       = "Storage Bay"
+    FooStorage_5x3Icon   = &FooStorage_5x3
+    FooStorage_5x3Desc   = "Stores 15 stacks of resources of any types."
+    FooStorage_5x3DescNW = "Stores 15 stacks of resources of any types. (Without wall)"
+
+    FooStorage_6x3       = "Storage Bay"
+    FooStorage_6x3Icon   = &FooStorage_6x3
+    FooStorage_6x3Desc   = "Stores 18 stacks of resources of any types."
+    FooStorage_6x3DescNW = "Stores 18 stacks of resources of any types. (Without wall)"
+
+    FooStorage_5x4       = "Storage Bay"
+    FooStorage_5x4Icon   = &FooStorage_5x4
+    FooStorage_5x4Desc   = "Stores 20 stacks of resources of any types."
+    FooStorage_5x4DescNW = "Stores 20 stacks of resources of any types. (Without wall)"
+
+    FooStorage_6x4       = "Storage Bay"
+    FooStorage_6x4Icon   = &FooStorage_6x4
+    FooStorage_6x4Desc   = "Stores 24 stacks of resources of any types."
+    FooStorage_6x4DescNW = "Stores 24 stacks of resources of any types. (Without wall)"
+
+    FooStorage_5x5       = "Storage Bay"
+    FooStorage_5x5Icon   = &FooStorage_5x5
+    FooStorage_5x5Desc   = "Stores 25 stacks of resources of any types."
+    FooStorage_5x5DescNW = "Stores 25 stacks of resources of any types. (Without wall)"
+
+    FooStorage_6x5       = "Storage Bay"
+    FooStorage_6x5Icon   = &FooStorage_6x5
+    FooStorage_6x5Desc   = "Stores 30 stacks of resources of any types."
+    FooStorage_6x5DescNW = "Stores 30 stacks of resources of any types. (Without wall)"
+
+    FooStorage_6x6       = "Storage Bay"
+    FooStorage_6x6Icon   = &FooStorage_6x6
+    FooStorage_6x6Desc   = "Stores 36 stacks of resources of any types."
+    FooStorage_6x6DescNW = "Stores 36 stacks of resources of any types. (Without wall)"
+}

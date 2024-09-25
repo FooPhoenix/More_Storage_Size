@@ -1,0 +1,68 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+Parts
+{
+    FooStorage_5x1       = "倉庫"
+    FooStorage_5x1Icon   = &FooStorage_5x1
+    FooStorage_5x1Desc   = "任意の資源を5スタック分格納します。"
+    FooStorage_5x1DescNW = "任意の資源を5スタック分格納します。（壁なし）"
+
+    FooStorage_6x1       = "倉庫"
+    FooStorage_6x1Icon   = &FooStorage_6x1
+    FooStorage_6x1Desc   = "任意の資源を6スタック分格納します。"
+    FooStorage_6x1DescNW = "任意の資源を6スタック分格納します。（壁なし）"
+
+    FooStorage_5x2       = "倉庫"
+    FooStorage_5x2Icon   = &FooStorage_5x2
+    FooStorage_5x2Desc   = "任意の資源を10スタック分格納します。"
+    FooStorage_5x2DescNW = "任意の資源を10スタック分格納します。（壁なし）"
+
+    FooStorage_6x2       = "倉庫"
+    FooStorage_6x2Icon   = &FooStorage_6x2
+    FooStorage_6x2Desc   = "任意の資源を12スタック分格納します。"
+    FooStorage_6x2DescNW = "任意の資源を12スタック分格納します。（壁なし）"
+
+    FooStorage_5x3       = "倉庫"
+    FooStorage_5x3Icon   = &FooStorage_5x3
+    FooStorage_5x3Desc   = "任意の資源を15スタック分格納します。"
+    FooStorage_5x3DescNW = "任意の資源を15スタック分格納します。（壁なし）"
+
+    FooStorage_6x3       = "倉庫"
+    FooStorage_6x3Icon   = &FooStorage_6x3
+    FooStorage_6x3Desc   = "任意の資源を18スタック分格納します。"
+    FooStorage_6x3DescNW = "任意の資源を18スタック分格納します。（壁なし）"
+
+    FooStorage_5x4       = "倉庫"
+    FooStorage_5x4Icon   = &FooStorage_5x4
+    FooStorage_5x4Desc   = "任意の資源を20スタック分格納します。"
+    FooStorage_5x4DescNW = "任意の資源を20スタック分格納します。（壁なし）"
+
+    FooStorage_6x4       = "倉庫"
+    FooStorage_6x4Icon   = &FooStorage_6x4
+    FooStorage_6x4Desc   = "任意の資源を24スタック分格納します。"
+    FooStorage_6x4DescNW = "任意の資源を24スタック分格納します。（壁なし）"
+
+    FooStorage_5x5       = "倉庫"
+    FooStorage_5x5Icon   = &FooStorage_5x5
+    FooStorage_5x5Desc   = "任意の資源を25スタック分格納します。"
+    FooStorage_5x5DescNW = "任意の資源を25スタック分格納します。（壁なし）"
+
+    FooStorage_6x5       = "倉庫"
+    FooStorage_6x5Icon   = &FooStorage_6x5
+    FooStorage_6x5Desc   = "任意の資源を30スタック分格納します。"
+    FooStorage_6x5DescNW = "任意の資源を30スタック分格納します。（壁なし）"
+
+    FooStorage_6x6       = "倉庫"
+    FooStorage_6x6Icon   = &FooStorage_6x6
+    FooStorage_6x6Desc   = "任意の資源を36スタック分格納します。"
+    FooStorage_6x6DescNW = "任意の資源を36スタック分格納します。（壁なし）"
+}

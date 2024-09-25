@@ -1,0 +1,68 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+Parts
+{
+    FooStorage_5x1       = "Compartimento de almacenamiento"
+    FooStorage_5x1Icon   = "Almacenamiento"
+    FooStorage_5x1Desc   = "Almacena 5 pilas de recursos de cualquier tipo."
+    FooStorage_5x1DescNW = "Almacena 5 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_6x1       = "Compartimento de almacenamiento"
+    FooStorage_6x1Icon   = "Almacenamiento"
+    FooStorage_6x1Desc   = "Almacena 6 pilas de recursos de cualquier tipo."
+    FooStorage_6x1DescNW = "Almacena 6 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_5x2       = "Compartimento de almacenamiento"
+    FooStorage_5x2Icon   = "Almacenamiento"
+    FooStorage_5x2Desc   = "Almacena 10 pilas de recursos de cualquier tipo."
+    FooStorage_5x2DescNW = "Almacena 10 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_6x2       = "Compartimento de almacenamiento"
+    FooStorage_6x2Icon   = "Almacenamiento"
+    FooStorage_6x2Desc   = "Almacena 12 pilas de recursos de cualquier tipo."
+    FooStorage_6x2DescNW = "Almacena 12 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_5x3       = "Compartimento de almacenamiento"
+    FooStorage_5x3Icon   = "Almacenamiento"
+    FooStorage_5x3Desc   = "Almacena 15 pilas de recursos de cualquier tipo."
+    FooStorage_5x3DescNW = "Almacena 15 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_6x3       = "Compartimento de almacenamiento"
+    FooStorage_6x3Icon   = "Almacenamiento"
+    FooStorage_6x3Desc   = "Almacena 18 pilas de recursos de cualquier tipo."
+    FooStorage_6x3DescNW = "Almacena 18 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_5x4       = "Compartimento de almacenamiento"
+    FooStorage_5x4Icon   = "Almacenamiento"
+    FooStorage_5x4Desc   = "Almacena 20 pilas de recursos de cualquier tipo."
+    FooStorage_5x4DescNW = "Almacena 20 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_6x4       = "Compartimento de almacenamiento"
+    FooStorage_6x4Icon   = "Almacenamiento"
+    FooStorage_6x4Desc   = "Almacena 24 pilas de recursos de cualquier tipo."
+    FooStorage_6x4DescNW = "Almacena 24 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_5x5       = "Compartimento de almacenamiento"
+    FooStorage_5x5Icon   = "Almacenamiento"
+    FooStorage_5x5Desc   = "Almacena 25 pilas de recursos de cualquier tipo."
+    FooStorage_5x5DescNW = "Almacena 25 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_6x5       = "Compartimento de almacenamiento"
+    FooStorage_6x5Icon   = "Almacenamiento"
+    FooStorage_6x5Desc   = "Almacena 30 pilas de recursos de cualquier tipo."
+    FooStorage_6x5DescNW = "Almacena 30 pilas de recursos de cualquier tipo. (Sin muro)"
+
+    FooStorage_6x6       = "Compartimento de almacenamiento"
+    FooStorage_6x6Icon   = "Almacenamiento"
+    FooStorage_6x6Desc   = "Almacena 36 pilas de recursos de cualquier tipo."
+    FooStorage_6x6DescNW = "Almacena 36 pilas de recursos de cualquier tipo. (Sin muro)"
+}

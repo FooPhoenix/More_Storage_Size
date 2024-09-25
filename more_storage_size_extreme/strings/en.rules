@@ -1,0 +1,88 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+Parts
+{
+    FooStorage_7x1       = "Storage Bay"
+    FooStorage_7x1Icon   = &FooStorage_7x1
+    FooStorage_7x1Desc   = "Stores 7 stacks of resources of any types."
+    FooStorage_7x1DescNW = "Stores 7 stacks of resources of any types. (Without wall)"
+
+    FooStorage_8x1       = "Storage Bay"
+    FooStorage_8x1Icon   = &FooStorage_8x1
+    FooStorage_8x1Desc   = "Stores 8 stacks of resources of any types."
+    FooStorage_8x1DescNW = "Stores 8 stacks of resources of any types. (Without wall)"
+
+    FooStorage_7x2       = "Storage Bay"
+    FooStorage_7x2Icon   = &FooStorage_7x2
+    FooStorage_7x2Desc   = "Stores 14 stacks of resources of any types."
+    FooStorage_7x2DescNW = "Stores 14 stacks of resources of any types. (Without wall)"
+
+    FooStorage_8x2       = "Storage Bay"
+    FooStorage_8x2Icon   = &FooStorage_8x2
+    FooStorage_8x2Desc   = "Stores 16 stacks of resources of any types."
+    FooStorage_8x2DescNW = "Stores 16 stacks of resources of any types. (Without wall)"
+
+    FooStorage_7x3       = "Storage Bay"
+    FooStorage_7x3Icon   = &FooStorage_7x3
+    FooStorage_7x3Desc   = "Stores 21 stacks of resources of any types."
+    FooStorage_7x3DescNW = "Stores 21 stacks of resources of any types. (Without wall)"
+
+    FooStorage_8x3       = "Storage Bay"
+    FooStorage_8x3Icon   = &FooStorage_8x3
+    FooStorage_8x3Desc   = "Stores 24 stacks of resources of any types."
+    FooStorage_8x3DescNW = "Stores 24 stacks of resources of any types. (Without wall)"
+
+    FooStorage_7x4       = "Storage Bay"
+    FooStorage_7x4Icon   = &FooStorage_7x4
+    FooStorage_7x4Desc   = "Stores 28 stacks of resources of any types."
+    FooStorage_7x4DescNW = "Stores 28 stacks of resources of any types. (Without wall)"
+
+    FooStorage_8x4       = "Storage Bay"
+    FooStorage_8x4Icon   = &FooStorage_8x4
+    FooStorage_8x4Desc   = "Stores 32 stacks of resources of any types."
+    FooStorage_8x4DescNW = "Stores 32 stacks of resources of any types. (Without wall)"
+
+    FooStorage_7x5       = "Storage Bay"
+    FooStorage_7x5Icon   = &FooStorage_7x5
+    FooStorage_7x5Desc   = "Stores 35 stacks of resources of any types."
+    FooStorage_7x5DescNW = "Stores 35 stacks of resources of any types. (Without wall)"
+
+    FooStorage_8x5       = "Storage Bay"
+    FooStorage_8x5Icon   = &FooStorage_8x5
+    FooStorage_8x5Desc   = "Stores 40 stacks of resources of any types."
+    FooStorage_8x5DescNW = "Stores 40 stacks of resources of any types. (Without wall)"
+
+    FooStorage_7x6       = "Storage Bay"
+    FooStorage_7x6Icon   = &FooStorage_7x6
+    FooStorage_7x6Desc   = "Stores 42 stacks of resources of any types."
+    FooStorage_7x6DescNW = "Stores 42 stacks of resources of any types. (Without wall)"
+
+    FooStorage_8x6       = "Storage Bay"
+    FooStorage_8x6Icon   = &FooStorage_8x6
+    FooStorage_8x6Desc   = "Stores 48 stacks of resources of any types."
+    FooStorage_8x6DescNW = "Stores 48 stacks of resources of any types. (Without wall)"
+
+    FooStorage_7x7       = "Storage Bay"
+    FooStorage_7x7Icon   = &FooStorage_7x7
+    FooStorage_7x7Desc   = "Stores 49 stacks of resources of any types."
+    FooStorage_7x7DescNW = "Stores 49 stacks of resources of any types. (Without wall)"
+
+    FooStorage_8x7       = "Storage Bay"
+    FooStorage_8x7Icon   = &FooStorage_8x7
+    FooStorage_8x7Desc   = "Stores 56 stacks of resources of any types."
+    FooStorage_8x7DescNW = "Stores 56 stacks of resources of any types. (Without wall)"
+
+    FooStorage_8x8       = "Storage Bay"
+    FooStorage_8x8Icon   = &FooStorage_8x8
+    FooStorage_8x8Desc   = "Stores 64 stacks of resources of any types."
+    FooStorage_8x8DescNW = "Stores 64 stacks of resources of any types. (Without wall)"
+}

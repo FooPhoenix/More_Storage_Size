@@ -1,0 +1,88 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+Parts
+{
+    FooStorage_7x1       = "存储室"
+    FooStorage_7x1Icon   = &FooStorage_7x1
+    FooStorage_7x1Desc   = "存储7堆任何类型的资源。"
+    FooStorage_7x1DescNW = "存储7堆任何类型的资源。 （无墙）"
+
+    FooStorage_8x1       = "存储室"
+    FooStorage_8x1Icon   = &FooStorage_8x1
+    FooStorage_8x1Desc   = "存储8堆任何类型的资源。"
+    FooStorage_8x1DescNW = "存储8堆任何类型的资源。 （无墙）"
+
+    FooStorage_7x2       = "存储室"
+    FooStorage_7x2Icon   = &FooStorage_7x2
+    FooStorage_7x2Desc   = "存储14堆任何类型的资源。"
+    FooStorage_7x2DescNW = "存储14堆任何类型的资源。 （无墙）"
+
+    FooStorage_8x2       = "存储室"
+    FooStorage_8x2Icon   = &FooStorage_8x2
+    FooStorage_8x2Desc   = "存储16堆任何类型的资源。"
+    FooStorage_8x2DescNW = "存储16堆任何类型的资源。 （无墙）"
+
+    FooStorage_7x3       = "存储室"
+    FooStorage_7x3Icon   = &FooStorage_7x3
+    FooStorage_7x3Desc   = "存储21堆任何类型的资源。"
+    FooStorage_7x3DescNW = "存储21堆任何类型的资源。 （无墙）"
+
+    FooStorage_8x3       = "存储室"
+    FooStorage_8x3Icon   = &FooStorage_8x3
+    FooStorage_8x3Desc   = "存储24堆任何类型的资源。"
+    FooStorage_8x3DescNW = "存储24堆任何类型的资源。 （无墙）"
+
+    FooStorage_7x4       = "存储室"
+    FooStorage_7x4Icon   = &FooStorage_7x4
+    FooStorage_7x4Desc   = "存储28堆任何类型的资源。"
+    FooStorage_7x4DescNW = "存储28堆任何类型的资源。 （无墙）"
+
+    FooStorage_8x4       = "存储室"
+    FooStorage_8x4Icon   = &FooStorage_8x4
+    FooStorage_8x4Desc   = "存储32堆任何类型的资源。"
+    FooStorage_8x4DescNW = "存储32堆任何类型的资源。 （无墙）"
+
+    FooStorage_7x5       = "存储室"
+    FooStorage_7x5Icon   = &FooStorage_7x5
+    FooStorage_7x5Desc   = "存储35堆任何类型的资源。"
+    FooStorage_7x5DescNW = "存储35堆任何类型的资源。 （无墙）"
+
+    FooStorage_8x5       = "存储室"
+    FooStorage_8x5Icon   = &FooStorage_8x5
+    FooStorage_8x5Desc   = "存储40堆任何类型的资源。"
+    FooStorage_8x5DescNW = "存储40堆任何类型的资源。 （无墙）"
+
+    FooStorage_7x6       = "存储室"
+    FooStorage_7x6Icon   = &FooStorage_7x6
+    FooStorage_7x6Desc   = "存储42堆任何类型的资源。"
+    FooStorage_7x6DescNW = "存储42堆任何类型的资源。 （无墙）"
+
+    FooStorage_8x6       = "存储室"
+    FooStorage_8x6Icon   = &FooStorage_8x6
+    FooStorage_8x6Desc   = "存储48堆任何类型的资源。"
+    FooStorage_8x6DescNW = "存储48堆任何类型的资源。 （无墙）"
+
+    FooStorage_7x7       = "存储室"
+    FooStorage_7x7Icon   = &FooStorage_7x7
+    FooStorage_7x7Desc   = "存储49堆任何类型的资源。"
+    FooStorage_7x7DescNW = "存储49堆任何类型的资源。 （无墙）"
+
+    FooStorage_8x7       = "存储室"
+    FooStorage_8x7Icon   = &FooStorage_8x7
+    FooStorage_8x7Desc   = "存储56堆任何类型的资源。"
+    FooStorage_8x7DescNW = "存储56堆任何类型的资源。 （无墙）"
+
+    FooStorage_8x8       = "存储室"
+    FooStorage_8x8Icon   = &FooStorage_8x8
+    FooStorage_8x8Desc   = "存储64堆任何类型的资源。"
+    FooStorage_8x8DescNW = "存储64堆任何类型的资源。 （无墙）"
+}

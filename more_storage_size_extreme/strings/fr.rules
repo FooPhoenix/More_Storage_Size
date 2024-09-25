@@ -1,0 +1,88 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+Parts
+{
+    FooStorage_7x1       = "Soute"
+    FooStorage_7x1Icon   = &FooStorage_7x1
+    FooStorage_7x1Desc   = "Permet de stocker 7 piles de n’importe quelle ressource."
+    FooStorage_7x1DescNW = "Permet de stocker 7 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_8x1       = "Soute"
+    FooStorage_8x1Icon   = &FooStorage_8x1
+    FooStorage_8x1Desc   = "Permet de stocker 8 piles de n’importe quelle ressource."
+    FooStorage_8x1DescNW = "Permet de stocker 8 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_7x2       = "Soute"
+    FooStorage_7x2Icon   = &FooStorage_7x2
+    FooStorage_7x2Desc   = "Permet de stocker 14 piles de n’importe quelle ressource."
+    FooStorage_7x2DescNW = "Permet de stocker 14 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_8x2       = "Soute"
+    FooStorage_8x2Icon   = &FooStorage_8x2
+    FooStorage_8x2Desc   = "Permet de stocker 16 piles de n’importe quelle ressource."
+    FooStorage_8x2DescNW = "Permet de stocker 16 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_7x3       = "Soute"
+    FooStorage_7x3Icon   = &FooStorage_7x3
+    FooStorage_7x3Desc   = "Permet de stocker 21 piles de n’importe quelle ressource."
+    FooStorage_7x3DescNW = "Permet de stocker 21 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_8x3       = "Soute"
+    FooStorage_8x3Icon   = &FooStorage_8x3
+    FooStorage_8x3Desc   = "Permet de stocker 24 piles de n’importe quelle ressource."
+    FooStorage_8x3DescNW = "Permet de stocker 24 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_7x4       = "Soute"
+    FooStorage_7x4Icon   = &FooStorage_7x4
+    FooStorage_7x4Desc   = "Permet de stocker 28 piles de n’importe quelle ressource."
+    FooStorage_7x4DescNW = "Permet de stocker 28 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_8x4       = "Soute"
+    FooStorage_8x4Icon   = &FooStorage_8x4
+    FooStorage_8x4Desc   = "Permet de stocker 32 piles de n’importe quelle ressource."
+    FooStorage_8x4DescNW = "Permet de stocker 32 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_7x5       = "Soute"
+    FooStorage_7x5Icon   = &FooStorage_7x5
+    FooStorage_7x5Desc   = "Permet de stocker 35 piles de n’importe quelle ressource."
+    FooStorage_7x5DescNW = "Permet de stocker 35 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_8x5       = "Soute"
+    FooStorage_8x5Icon   = &FooStorage_8x5
+    FooStorage_8x5Desc   = "Permet de stocker 40 piles de n’importe quelle ressource."
+    FooStorage_8x5DescNW = "Permet de stocker 40 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_7x6       = "Soute"
+    FooStorage_7x6Icon   = &FooStorage_7x6
+    FooStorage_7x6Desc   = "Permet de stocker 42 piles de n’importe quelle ressource."
+    FooStorage_7x6DescNW = "Permet de stocker 42 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_8x6       = "Soute"
+    FooStorage_8x6Icon   = &FooStorage_8x6
+    FooStorage_8x6Desc   = "Permet de stocker 48 piles de n’importe quelle ressource."
+    FooStorage_8x6DescNW = "Permet de stocker 48 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_7x7       = "Soute"
+    FooStorage_7x7Icon   = &FooStorage_7x7
+    FooStorage_7x7Desc   = "Permet de stocker 49 piles de n’importe quelle ressource."
+    FooStorage_7x7DescNW = "Permet de stocker 49 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_8x7       = "Soute"
+    FooStorage_8x7Icon   = &FooStorage_8x7
+    FooStorage_8x7Desc   = "Permet de stocker 56 piles de n’importe quelle ressource."
+    FooStorage_8x7DescNW = "Permet de stocker 56 piles de n’importe quelle ressource. (Sans mur)"
+
+    FooStorage_8x8       = "Soute"
+    FooStorage_8x8Icon   = &FooStorage_8x8
+    FooStorage_8x8Desc   = "Permet de stocker 64 piles de n’importe quelle ressource."
+    FooStorage_8x8DescNW = "Permet de stocker 64 piles de n’importe quelle ressource. (Sans mur)"
+}

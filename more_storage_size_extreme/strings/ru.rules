@@ -1,0 +1,88 @@
+//
+//      Hi there ! :)
+//
+//      You are welcome to help with translation.
+//      You can contribute for everyone directly by sending a push request on
+//      https://github.com/FooPhoenix/More_Storage_Size, so do not
+//      hesitate to fork the project.
+//
+//      Thank you very much !
+//
+
+Parts
+{
+    FooStorage_7x1       = "Хранилище"
+    FooStorage_7x1Icon   = &FooStorage_7x1
+    FooStorage_7x1Desc   = "Хранит 7 блоков ресурсов любого вида."
+    FooStorage_7x1DescNW = "Хранит 7 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_8x1       = "Хранилище"
+    FooStorage_8x1Icon   = &FooStorage_8x1
+    FooStorage_8x1Desc   = "Хранит 8 блоков ресурсов любого вида."
+    FooStorage_8x1DescNW = "Хранит 8 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_7x2       = "Хранилище"
+    FooStorage_7x2Icon   = &FooStorage_7x2
+    FooStorage_7x2Desc   = "Хранит 14 блоков ресурсов любого вида."
+    FooStorage_7x2DescNW = "Хранит 14 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_8x2       = "Хранилище"
+    FooStorage_8x2Icon   = &FooStorage_8x2
+    FooStorage_8x2Desc   = "Хранит 16 блоков ресурсов любого вида."
+    FooStorage_8x2DescNW = "Хранит 16 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_7x3       = "Хранилище"
+    FooStorage_7x3Icon   = &FooStorage_7x3
+    FooStorage_7x3Desc   = "Хранит 21 блоков ресурсов любого вида."
+    FooStorage_7x3DescNW = "Хранит 21 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_8x3       = "Хранилище"
+    FooStorage_8x3Icon   = &FooStorage_8x3
+    FooStorage_8x3Desc   = "Хранит 24 блока ресурсов любого вида."
+    FooStorage_8x3DescNW = "Хранит 24 блока ресурсов любого вида. (Без стены)"
+
+    FooStorage_7x4       = "Хранилище"
+    FooStorage_7x4Icon   = &FooStorage_7x4
+    FooStorage_7x4Desc   = "Хранит 28 блоков ресурсов любого вида."
+    FooStorage_7x4DescNW = "Хранит 28 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_8x4       = "Хранилище"
+    FooStorage_8x4Icon   = &FooStorage_8x4
+    FooStorage_8x4Desc   = "Хранит 32 блока ресурсов любого вида."
+    FooStorage_8x4DescNW = "Хранит 32 блока ресурсов любого вида. (Без стены)"
+
+    FooStorage_7x5       = "Хранилище"
+    FooStorage_7x5Icon   = &FooStorage_7x5
+    FooStorage_7x5Desc   = "Хранит 35 блоков ресурсов любого вида."
+    FooStorage_7x5DescNW = "Хранит 35 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_8x5       = "Хранилище"
+    FooStorage_8x5Icon   = &FooStorage_8x5
+    FooStorage_8x5Desc   = "Хранит 40 блоков ресурсов любого вида."
+    FooStorage_8x5DescNW = "Хранит 40 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_7x6       = "Хранилище"
+    FooStorage_7x6Icon   = &FooStorage_7x6
+    FooStorage_7x6Desc   = "Хранит 42 блока ресурсов любого вида."
+    FooStorage_7x6DescNW = "Хранит 42 блока ресурсов любого вида. (Без стены)"
+
+    FooStorage_8x6       = "Хранилище"
+    FooStorage_8x6Icon   = &FooStorage_8x6
+    FooStorage_8x6Desc   = "Хранит 48 блоков ресурсов любого вида."
+    FooStorage_8x6DescNW = "Хранит 48 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_7x7       = "Хранилище"
+    FooStorage_7x7Icon   = &FooStorage_7x7
+    FooStorage_7x7Desc   = "Хранит 49 блоков ресурсов любого вида."
+    FooStorage_7x7DescNW = "Хранит 49 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_8x7       = "Хранилище"
+    FooStorage_8x7Icon   = &FooStorage_8x7
+    FooStorage_8x7Desc   = "Хранит 56 блоков ресурсов любого вида."
+    FooStorage_8x7DescNW = "Хранит 56 блоков ресурсов любого вида. (Без стены)"
+
+    FooStorage_8x8       = "Хранилище"
+    FooStorage_8x8Icon   = &FooStorage_8x8
+    FooStorage_8x8Desc   = "Хранит 64 блока ресурсов любого вида."
+    FooStorage_8x8DescNW = "Хранит 64 блока ресурсов любого вида. (Без стены)"
+}

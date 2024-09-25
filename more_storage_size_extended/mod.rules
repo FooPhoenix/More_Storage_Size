@@ -1,0 +1,53 @@
+
+ID = FooPhoenix.MoreStorageSizeExd
+Author = "FooPhoenix"
+Name = "More Storage Size (Extended Edition)"
+Version = 2.0.0
+
+CompatibleGameVersions = ["0.20.0", "0.21.0", "0.22.0", "0.23.0", "0.24.0", "0.25.0", "0.26.0", "0.27.0"]
+
+ModifiesMultiplayer = true
+
+Description = "The \"More Storage Size\" mods familly are mods that adds new storage sizes for your ships.\n  - More Storage Size (Standard Edition) : Complete all game storage size from 1x1 to 4x4.\n  - More Storage Size (Extended Edition) : Adds all storage size from 5x1 to 6x6.\n  - More Storage Size (Extreme Edition) : Adds all storage size from 7x1 to 8x8.\n  - More Storage Size ('You are crazy' Edition) : Adds some very big storage size like 12x12 and 16x16.\n Storage without wall between each other are also added.\n\nUpdated for the game version '0.27.xx'."
+Logo = "logo.png"
+
+StringsFolder = "strings"
+
+Actions
+[
+	{
+		Action = AddMany
+		AddTo = "<./Data/ships/terran/terran.rules>/Terran/Parts"
+
+		CreateIfNotExisting = false
+		IgnoreIfNotExisting = false
+
+		ManyToAdd
+		[
+            &<storage_5x1/storage_5x1.rules>/Part
+            &<storage_6x1/storage_6x1.rules>/Part
+            &<storage_5x2/storage_5x2.rules>/Part
+            &<storage_6x2/storage_6x2.rules>/Part
+            &<storage_5x3/storage_5x3.rules>/Part
+            &<storage_6x3/storage_6x3.rules>/Part
+            &<storage_5x4/storage_5x4.rules>/Part
+            &<storage_6x4/storage_6x4.rules>/Part
+            &<storage_5x5/storage_5x5.rules>/Part
+            &<storage_6x5/storage_6x5.rules>/Part
+            &<storage_6x6/storage_6x6.rules>/Part
+            
+            &<storage_5x1/nw_storage_5x1.rules>/Part
+            &<storage_6x1/nw_storage_6x1.rules>/Part
+            &<storage_5x2/nw_storage_5x2.rules>/Part
+            &<storage_6x2/nw_storage_6x2.rules>/Part
+            &<storage_5x3/nw_storage_5x3.rules>/Part
+            &<storage_6x3/nw_storage_6x3.rules>/Part
+            &<storage_5x4/nw_storage_5x4.rules>/Part
+            &<storage_6x4/nw_storage_6x4.rules>/Part
+            &<storage_5x5/nw_storage_5x5.rules>/Part
+            &<storage_6x5/nw_storage_6x5.rules>/Part
+            &<storage_6x6/nw_storage_6x6.rules>/Part
+		]
+	}
+]
+            

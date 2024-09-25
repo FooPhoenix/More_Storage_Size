@@ -56,7 +56,7 @@ Actions
     
     {
 		Action = AddMany
-		AddTo = "<ships/terran/terran.rules>/Terran/Parts"
+		AddTo = "<./Data/ships/terran/terran.rules>/Terran/Parts"
 
 		CreateIfNotExisting = false
 		IgnoreIfNotExisting = false
@@ -89,7 +89,7 @@ Actions
     {
 		Action = Overrides
     
-		OverrideIn = "<ships/terran/storage_2x2/storage_2x2.rules>/Part"
+		OverrideIn = "<./Data/ships/terran/storage_2x2/storage_2x2.rules>/Part"
      
  		Overrides
         {
@@ -104,7 +104,7 @@ Actions
     {
 		Action = Overrides
     
-		OverrideIn = "<ships/terran/storage_3x2/storage_3x2.rules>/Part"
+		OverrideIn = "<./Data/ships/terran/storage_3x2/storage_3x2.rules>/Part"
      
  		Overrides
         {
@@ -119,7 +119,7 @@ Actions
     {
 		Action = Overrides
     
-		OverrideIn = "<ships/terran/storage_3x3/storage_3x3.rules>/Part"
+		OverrideIn = "<./Data/ships/terran/storage_3x3/storage_3x3.rules>/Part"
      
  		Overrides
         {
@@ -134,7 +134,7 @@ Actions
     {
 		Action = Overrides
     
-		OverrideIn = "<ships/terran/storage_4x3/storage_4x3.rules>/Part"
+		OverrideIn = "<./Data/ships/terran/storage_4x3/storage_4x3.rules>/Part"
      
  		Overrides
         {
@@ -149,7 +149,7 @@ Actions
     {
 		Action = Overrides
     
-		OverrideIn = "<ships/terran/storage_4x4/storage_4x4.rules>/Part"
+		OverrideIn = "<./Data/ships/terran/storage_4x4/storage_4x4.rules>/Part"
      
  		Overrides
         {
